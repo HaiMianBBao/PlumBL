@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.15)
+
+message("examples/ch58x plum bootloader start")
+
+find_package(xxx_sdk REQUIRED HINTS $ENV{SDK_BASE})
+
+sdk_add_compile_definitions(-DDEBUG=0)
+sdk_add_compile_definitions(-DUSB_REQUEST_BUFFER_SIZE=4096)
+sdk_add_compile_definitions(-DUSBD_DFU_APP_DEFAULT_ADD=0x10000)
+sdk_add_compile_definitions(-DUSBD_DFU_XFER_SIZE=4096)
+
+sdk_set_main_file(main.c)
+
+project(${CHIP}_${BL_TYPE})
+
+message("examples/ch58x plum bootloader end")
