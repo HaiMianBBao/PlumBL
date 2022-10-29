@@ -90,13 +90,6 @@ const uint8_t msc_ram_descriptor[] = {
 #define BLOCK_SIZE  512
 #define BLOCK_COUNT 0x10109
 
-typedef struct
-{
-    uint8_t BlockSpace[BLOCK_SIZE];
-} BLOCK_TYPE;
-
-BLOCK_TYPE mass_block[1];
-
 #include "uf2.h"
 static WriteState _wr_state = { 0 };
 
@@ -119,12 +112,11 @@ int usbd_msc_sector_write(uint32_t sector, uint8_t *buffer, uint32_t length)
     static uint8_t state;
     (void)state;
     if (sector < BLOCK_COUNT) {
-        memcpy(mass_block[0].BlockSpace, buffer, length);
         /**
          * In the uf2_write_block function, if the uF2 file with this board ID is recognized,
          * the app area will be erased
          */
-        state = uf2_write_block(0, mass_block[0].BlockSpace, &_wr_state);
+        state = uf2_write_block(0, buffer, &_wr_state);
         lgk_boot_log("%d \r\n", state);
     }
 

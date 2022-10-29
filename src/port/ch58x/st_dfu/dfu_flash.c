@@ -12,7 +12,7 @@
 #define USB_CONFIG_SIZE (9 + 9 + 9)
 
 const uint8_t dfu_flash_descriptor[] = {
-    USB_DEVICE_DESCRIPTOR_INIT(USB_1_1, 0x00, 0x00, 0x00, USBD_VID, USBD_PID, 0x0200, 0x01),
+    USB_DEVICE_DESCRIPTOR_INIT(USB_1_1, 0x00, 0x00, 0x00, USBD_VID, USBD_PID, 0x2200, 0x01),
     USB_CONFIG_DESCRIPTOR_INIT(USB_CONFIG_SIZE, 0x01, 0x01, USB_CONFIG_BUS_POWERED, USBD_MAX_POWER),
     DFU_DESCRIPTOR_INIT(),
     ///////////////////////////////////////
@@ -38,10 +38,10 @@ const uint8_t dfu_flash_descriptor[] = {
     ///////////////////////////////////////
     0x1e,                       /* bLength */
     USB_DESCRIPTOR_TYPE_STRING, /* bDescriptorType */
-    'L', 0x00,                  /* wcChar0 */
-    'G', 0x00,                  /* wcChar1 */
-    'K', 0x00,                  /* wcChar2 */
-    ' ', 0x00,                  /* wcChar3 */
+    'P', 0x00,                  /* wcChar0 */
+    'l', 0x00,                  /* wcChar1 */
+    'u', 0x00,                  /* wcChar2 */
+    'm', 0x00,                  /* wcChar3 */
     'B', 0x00,                  /* wcChar4 */
     'o', 0x00,                  /* wcChar5 */
     'o', 0x00,                  /* wcChar6 */

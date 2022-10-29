@@ -20,7 +20,6 @@ file(GLOB_RECURSE PlumUSB_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/PlumUSB/core/lg_usbd_core.c"
     "${CMAKE_CURRENT_LIST_DIR}/PlumUSB/port/${CHIP}/lg_usb_dc_port.c"
     "${CMAKE_CURRENT_LIST_DIR}/PlumUSB/class/msc/lg_usbd_msc.c"
-    "${CMAKE_CURRENT_LIST_DIR}/PlumUSB/class/dfu/*.c"
     "${CMAKE_CURRENT_LIST_DIR}/PlumUSB/class/hid/*.c"
 )
 
@@ -35,6 +34,11 @@ file(GLOB SOURCES
     ${PlumUSB_SOURCES}
     ${PlumBOOT_SOURCES}
 )
+
+if(${BL_TYPE} STREQUAL "st_dfu")
+sdk_library_add_sources(${CMAKE_CURRENT_LIST_DIR}/PlumUSB/class/dfu/lg_usbd_dfu.c)
+endif()
+
 sdk_library_add_sources(${SOURCES})
 
 add_subdirectory(drv)

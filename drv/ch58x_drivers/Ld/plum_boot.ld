@@ -3,7 +3,10 @@ ENTRY( _start )
 MEMORY
 {
 	FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 40K
+	/* 
 	BOOT (xrw) : ORIGIN = 0x20007ffc, LENGTH = 4
+	RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 32K - 8 
+	*/
 	RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 32K - 4
 }
 
@@ -173,6 +176,7 @@ SECTIONS
 		PROVIDE(_eusrstack = . );
 	} >RAM  
 	
+	/*
     .boot :
     {
      . = ALIGN(4);
@@ -181,6 +185,7 @@ SECTIONS
      *(.boot.*)
      . = ALIGN(4);
     } >BOOT AT> FLASH
+	*/
 }
 
 

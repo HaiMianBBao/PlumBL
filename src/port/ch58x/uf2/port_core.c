@@ -6,6 +6,10 @@
 /*!< mcu */
 #include "CH58x_common.h"
 
+#ifndef DBRST_TAP_REG
+#define DBRST_TAP_REG _eusrstack[0]
+#endif
+
 #define jumpApp ((void (*)(void))((uint32_t *)APP_START_ADDRESS))
 
 #define BOARD_FLASH_SIZE (448 * 1024)
@@ -92,6 +96,9 @@ void lgk_boot_sys_init(void)
 
 bool lgk_boot_hard_is_enter(void)
 {
+#if HARD_ENTER_BOOT
+#if (HARD_ENTER_BL_WAY == HARD_ENTER_BL_WAY_GPIO)
+    /*!< Normal GPIO */
     static uint8_t init_flag = 0;
     if (init_flag == 0) {
         init_flag = 1;
@@ -102,6 +109,32 @@ bool lgk_boot_hard_is_enter(void)
     if (GPIOB_ReadPortPin(GPIO_Pin_4) == 0) {
         return true;
     }
+#elif (HARD_ENTER_BL_WAY == HARD_ENTER_BL_WAY_DB_RST)
+    /*!< Double reset */
+    /*!< App want to reboot quickly */
+    lgk_boot_log("DBRST_TAP_REG address %p vaule is %08lx \r\n", _eusrstack, DBRST_TAP_REG);
+    if (DBRST_TAP_REG == DBRST_TAP_MAGIC_QUICK_BOOT) {
+        DBRST_TAP_REG = 0;
+        return false;
+    }
+
+    if (DBRST_TAP_REG == DBRST_TAP_MAGIC) {
+        /*!< Double tap occurred */
+        DBRST_TAP_REG = 0;
+        lgk_boot_log("Double Tap Reset\r\n");
+        return true;
+    }
+
+    /*!< Register our first reset for double reset detection */
+    DBRST_TAP_REG = DBRST_TAP_MAGIC;
+
+    /*!< delay a fraction of second if Reset pin is tap during this delay --> we will enter dfu */
+    lgk_boot_deley_ms(DBRST_TAP_DELAY);
+    DBRST_TAP_REG = 0xdeadbeef;
+#else
+
+#endif
+#endif
     return false;
 }
 

@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include "lgk_boot_core.h"
 #include "lg_usbd_core.h"
-#include "port_common.h"
 
-/*!< reset will not be reinitialized */
-__attribute__((section(".boot"))) uint32_t lgk_boot_flag;
 volatile bool is_flashing_flag = 0;
 volatile bool flashing_start_flag = 0;
 
@@ -51,12 +48,14 @@ void lgk_boot_main(void)
 {
     if (lgk_boot_flag == JUMP_APP_FLAG) {
         /*!< Jump to app */
+        lgk_boot_flag = 0xdeadbeef;
         lgk_boot_jump_app(APP_START_ADDRESS);
         while (1) {
             // lgk_boot_log("lgk bootloader jump to app failed \r\n");
         }
     } else if (lgk_boot_flag == JUMP_BOOT_FLAG) {
         /*!< process the data from host */
+        lgk_boot_flag = 0xdeadbeef;
         lgk_boot_sys_init();
         lgk_boot_intf_init();
         lgk_boot_log("boot loader mode \r\n");
@@ -69,7 +68,7 @@ void lgk_boot_main(void)
             if (timeout_count > WAIT_TIME_OUT) {
                 timeout_count = 0;
                 lgk_boot_log("usb is not config and time out reset \r\n");
-                lgk_boot_flag = 0;
+                lgk_boot_flag = 0xdeadbeef;
                 lgk_boot_deley_ms(10);
                 lgk_boot_sys_reset();
             }
@@ -105,7 +104,7 @@ void lgk_boot_main(void)
     } else {
         /*!< The first power on will be here by default */
         lgk_boot_sys_init();
-        lgk_boot_log("lgk_boot_flag address %08x\r\n", &lgk_boot_flag);
+        lgk_boot_log("lgk_boot_flag address %p\r\n", &lgk_boot_flag);
 #if (HARD_ENTER_BOOT == 1)
         if (lgk_boot_hard_is_enter()) {
             lgk_boot_flag = JUMP_BOOT_FLAG;

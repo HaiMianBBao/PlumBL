@@ -1,14 +1,29 @@
 #pragma once
 
 #include <stdio.h>
+
+#define DBRST_TAP_MAGIC            0xf01669ef // Enter DFU magic
+#define DBRST_TAP_MAGIC_QUICK_BOOT 0xf02669ef // Skip double tap delay detection
+#define DBRST_TAP_MAGIC_ERASE_APP  0xf5e80ab4 // Erase entire application !!
+
+#define HARD_ENTER_BL_WAY_GPIO   0
+#define HARD_ENTER_BL_WAY_DB_RST 1
+
 #include "port_common.h"
 
-#define WAIT_TIME_OUT 60000
-
+#ifndef LGK_BOOT_DEBUG
 #define LGK_BOOT_DEBUG 0
-#define HARD_ENTER_BOOT 1
+#endif
 
-extern uint32_t lgk_boot_flag;
+#ifndef HARD_ENTER_BOOT
+#define HARD_ENTER_BOOT 0
+#endif
+
+#ifndef DBRST_TAP_DELAY
+#define DBRST_TAP_DELAY 100
+#endif
+
+#define WAIT_TIME_OUT 60000
 
 /*!< lgk bootloader api */
 /**
