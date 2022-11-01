@@ -10,15 +10,20 @@ set(PROJECT_BINARY_DIR ${build_dir})
 set(EXECUTABLE_OUTPUT_PATH ${build_dir})
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
+set_property(GLOBAL APPEND PROPERTY SOURCE_LIST)
+set_property(GLOBAL APPEND PROPERTY INCLUDE_LIST)
+set_property(GLOBAL APPEND PROPERTY LINKLIB_LIST)
+set_property(GLOBAL PROPERTY LINK_DIR)
+
 #添加一个接口库 所有跟SDK有关的都将被链接到这个库
 add_library(sdk_intf_lib INTERFACE)
 
-# #add app库
-add_library(app_lib STATIC ${SDK_BASE}/empty_file.c)
-# add_library(app_lib STATIC)
-# add_library(app_lib INTERFACE)
-#链接
-target_link_libraries(app_lib sdk_intf_lib)
+# # #add app库
+# add_library(app_lib STATIC ${SDK_BASE}/empty_file.c)
+# # add_library(app_lib STATIC)
+# # add_library(app_lib INTERFACE)
+# #链接
+# target_link_libraries(app_lib sdk_intf_lib)
 
 include(${SDK_BASE}/cmake/toolchain.cmake)
 include(${SDK_BASE}/cmake/extension.cmake)

@@ -17,7 +17,7 @@ static uint8_t lgk_boot_process(void)
             time_cout_1 = 0;
             time_cout_0++;
             lgk_boot_deley_ms(1);
-            if (time_cout_0 > 1000) {
+            if (time_cout_0 > COMPLETE_DELAY) {
                 lgk_boot_log("time_cout_0 \r\n");
                 time_cout_0 = 0;
                 flashing_start_flag = 0;
@@ -28,7 +28,7 @@ static uint8_t lgk_boot_process(void)
             time_cout_0 = 0;
             time_cout_1++;
             lgk_boot_deley_ms(1);
-            if (time_cout_1 > 1000) {
+            if (time_cout_1 > COMPLETE_DELAY) {
                 lgk_boot_log("time_cout_1 \r\n");
                 time_cout_1 = 0;
                 flashing_start_flag = 0;

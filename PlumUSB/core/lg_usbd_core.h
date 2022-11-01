@@ -11,6 +11,7 @@ extern "C"
 /* 文件引用 ------------------------------------------------------------------*/
 #include "stdint.h"
 #include "stdbool.h"
+#include "usb_config.h"
 #include "lg_usb_util.h"
 #include "lg_usb_def.h"
 #include "lg_usb_dc.h"

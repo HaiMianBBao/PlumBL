@@ -107,44 +107,6 @@ function(sdk_set_linker_script ld)
   set_property(GLOBAL PROPERTY LINKER_SCRIPT ${path})
 endfunction()
 
-function(search_application component_path)
-
-if(DEFINED APP)
-
-    # find CMakeLists in ${component_path}/${APP}/,${APP} is the first directory
-    file(GLOB_RECURSE first_dir_cmakelists ${component_path}/${APP}/CMakeLists.txt)
-
-    if(first_dir_cmakelists)
-    list(APPEND cmakelists_files ${first_dir_cmakelists})
-    endif()
-
-    # find CMakeLists in ${component_path}/*/${APP}*/,${APP} is the second directory
-    file(GLOB_RECURSE second_dir_cmakelists ${component_path}/*/${APP}*/CMakeLists.txt)
-
-    if(second_dir_cmakelists)
-    list(APPEND cmakelists_files ${second_dir_cmakelists})
-    endif()
-
-    list(REMOVE_DUPLICATES cmakelists_files)
-
-    if(cmakelists_files)
-        #build app finding
-        foreach(cmakelists_file IN LISTS cmakelists_files)
-        get_filename_component(app_absolute_dir ${cmakelists_file} DIRECTORY)
-        get_filename_component(app_absolute_dir_name ${app_absolute_dir} NAME)
-        message(STATUS "[run app:${app_absolute_dir_name}], path:${app_absolute_dir}")
-        add_subdirectory(${app_absolute_dir} ${PROJECT_BINARY_DIR}/samples/${app_absolute_dir_name})
-        endforeach()
-    else()
-    message(FATAL_ERROR "can not find ${APP} in the first or second directory under the path:${component_path}")
-    endif()
-
-else()
-add_subdirectory($ENV{PROJECT_DIR}/src src)
-endif()
-
-endfunction()
-
 macro(sdk_set_main_file)
     if(IS_ABSOLUTE ${ARGV0})
     set(path ${ARGV0})
@@ -174,8 +136,9 @@ macro(project name)
   get_property(SDK_LIBS_PROPERTY GLOBAL PROPERTY SDK_LIBS)
   # target_link_libraries(${name}.elf -Wl,--start-group ${SDK_LIBS_PROPERTY} app -Wl,--end-group)
 
-  target_link_libraries(${name}.elf -Wl,--start-group ${SDK_LIBS_PROPERTY} -Wl,--end-group)
-
+  # target_link_libraries(${name}.elf -Wl,--start-group  ${SDK_LIBS_PROPERTY} -Wl,--end-group)
+  target_link_libraries(${name}.elf -Wl,--start-group -Wl,--whole-archive ${SDK_LIBS_PROPERTY} -Wl,--no-whole-archive -Wl,--end-group)
+  
   add_custom_command(TARGET ${name}.elf POST_BUILD
   COMMAND ${CMAKE_OBJCOPY} -Obinary $<TARGET_FILE:${name}.elf> ${BIN_FILE}
   COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${name}.elf> ${HEX_FILE}
@@ -185,3 +148,31 @@ macro(project name)
   COMMENT "Generate ${BIN_FILE}\r\n")
 
 endmacro()
+
+function(sdk_append_source)
+  foreach(arg ${ARGV})
+    if(IS_DIRECTORY ${arg})
+    message(FATAL_ERROR "sdk_append_source")
+    endif()
+
+    if(IS_ABSOLUTE ${arg})
+    set(path ${arg})
+    else()
+    set(path ${CMAKE_CURRENT_SOURCE_DIR}/${arg})
+    endif()
+    file(GLOB_RECURSE SDK_SRC_LIST CMAKE_CONFIGURE_DEPENDS ${path})
+    set_property(GLOBAL APPEND PROPERTY SOURCE_LIST ${SDK_SRC_LIST})
+  endforeach()
+endfunction()
+
+function(sdk_append_inc)
+  foreach(arg ${ARGV})
+    if(IS_ABSOLUTE ${arg})
+      set(path ${arg})
+    else()
+      set(path ${CMAKE_CURRENT_SOURCE_DIR}/${arg})
+    endif()
+    set(INC_LIST ${path})
+    set_property(GLOBAL APPEND PROPERTY INCLUDE_LIST ${INC_LIST})
+  endforeach()
+endfunction()

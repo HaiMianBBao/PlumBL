@@ -1,1 +1,2 @@
-add_subdirectory(${CHIP}_drivers)
+add_subdirectory(${CHIP_FAMILY}_drivers)
+sdk_add_subdirectory_ifdef(RTT_VIEWER rtt_viewer_drivers)

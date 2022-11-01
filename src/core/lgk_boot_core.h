@@ -23,6 +23,10 @@
 #define DBRST_TAP_DELAY 100
 #endif
 
+#ifndef COMPLETE_DELAY
+#define COMPLETE_DELAY 1000
+#endif
+
 #define WAIT_TIME_OUT 60000
 
 /*!< lgk bootloader api */

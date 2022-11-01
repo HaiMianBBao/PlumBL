@@ -8,8 +8,10 @@ BL_TYPE?=uf2
 DEBUG?=n
 #cmake definition config
 cmake_definition+= -DTOOLCHAIN_PREFIX=riscv-none-embed-
+cmake_definition+= -DCHIP_FAMILY=ch58x
 cmake_definition+= -DCHIP=ch58x
-cmake_definition+= -DBOARD=ch58x_plum
+cmake_definition+= -DUSBIP=ch58x
+cmake_definition+= -DBOARD=ch582_plum
 # cmake_definition+= -DCONFIG_DEBUG=y
 cmake_definition+= -DDEBUG=${DEBUG}
 cmake_definition+= -DBL_TYPE=${BL_TYPE}
