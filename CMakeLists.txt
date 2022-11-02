@@ -27,7 +27,7 @@ sdk_append_inc(${CMAKE_CURRENT_LIST_DIR}/src/port/${CHIP_FAMILY})
 sdk_append_source(${PlumUSB_SOURCES})
 sdk_append_source(${PlumBOOT_SOURCES})
 
-if(${BL_TYPE} STREQUAL "st_dfu")
+if(${BL_TYPE} STREQUAL "dfu")
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/PlumUSB/class/dfu/lg_usbd_dfu.c)
 endif()
 

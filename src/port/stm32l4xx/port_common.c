@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "lgk_boot_core.h"
-#include "uf2.h"
 
 #include "stm32l4xx_hal.h"
 
@@ -158,13 +157,8 @@ void lgk_boot_flash_read(uint32_t start_add, void *buffer, uint32_t size)
 void lgk_boot_intf_init(void)
 {
     lgk_boot_log("lgk_boot_intf_init \r\n");
-
-    /*!< uf2_init */
-    uf2_init();
-
-    /*!< usb msc */
-    extern void msc_flash_init(void);
-    msc_flash_init();
+    extern void lgk_boot_port_intf_init(void);
+    lgk_boot_port_intf_init();
 }
 
 void lgk_boot_sys_init(void)

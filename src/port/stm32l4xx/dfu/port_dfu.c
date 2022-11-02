@@ -4,7 +4,8 @@
 #include <string.h>
 #include "lgk_boot_core.h"
 
-#include "stm32f4xx_hal.h"
+#include "stm32l4xx_hal.h"
+
 
 /* Port for st dfu ------------------------------------------------------------------*/
 void lgk_boot_port_intf_init(void)
@@ -35,6 +36,6 @@ uint16_t dfu_erase_flash(uint32_t Add)
 
 void dfu_leave(void)
 {
-    lgk_boot_flag = 0xdeadbeef;
+    lgk_boot_flag = JUMP_APP_FLAG;
     lgk_boot_sys_reset();
 }

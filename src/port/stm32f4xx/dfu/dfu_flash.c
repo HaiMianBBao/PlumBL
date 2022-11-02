@@ -2,12 +2,12 @@
 #include "lg_usbd_dfu.h"
 #include "lgk_boot_core.h"
 
-#define USBD_VID 0x0483
-#define USBD_PID 0xDF11
+#define USBD_VID 0x0903
+#define USBD_PID 0x0220
 #define USBD_MAX_POWER 100
 #define USBD_LANGID_STRING 1033
 
-#define FLASH_DESC_STR "@Internal Flash   /0x08000000/16*001Ka,048*01Kg"
+#define FLASH_DESC_STR "@Internal Flash   /0x08000000/04*016Ka,001*64Kg,001*128Kg"
 
 #define USB_CONFIG_SIZE (9 + 9 + 9)
 
@@ -70,7 +70,7 @@ const uint8_t dfu_flash_descriptor[] = {
     ///////////////////////////////////////
     /// string4 descriptor
     ///////////////////////////////////////
-    0x60,                       /* bLength */
+    0x72,                       /* bLength */
     USB_DESCRIPTOR_TYPE_STRING, /* bDescriptorType */
     '@', 0x00,                  /* wcChar0 */
     'I', 0x00,                  /* wcChar1 */
@@ -102,23 +102,32 @@ const uint8_t dfu_flash_descriptor[] = {
     '0', 0x00,                  /* wcChar27 */
     '0', 0x00,                  /* wcChar28 */
     '/', 0x00,                  /* wcChar29 */
-    '1', 0x00,                  /* wcChar30 */
-    '6', 0x00,                  /* wcChar31*/
+    '0', 0x00,                  /* wcChar30 */
+    '4', 0x00,                  /* wcChar31*/
     '*', 0x00,                  /* wcChar32 */
     '0', 0x00,                  /* wcChar33 */
-    '0', 0x00,                  /* wcChar34 */
-    '1', 0x00,                  /* wcChar35 */
+    '1', 0x00,                  /* wcChar34 */
+    '6', 0x00,                  /* wcChar35 */
     'K', 0x00,                  /* wcChar36 */
     'a', 0x00,                  /* wcChar37 */
     ',', 0x00,                  /* wcChar38 */
     '0', 0x00,                  /* wcChar39 */
-    '4', 0x00,                  /* wcChar40 */
-    '8', 0x00,                  /* wcChar41*/
+    '0', 0x00,                  /* wcChar40 */
+    '1', 0x00,                  /* wcChar41*/
     '*', 0x00,                  /* wcChar42 */
-    '0', 0x00,                  /* wcChar43 */
-    '1', 0x00,                  /* wcChar44 */
+    '6', 0x00,                  /* wcChar43 */
+    '4', 0x00,                  /* wcChar44 */
     'K', 0x00,                  /* wcChar45 */
     'g', 0x00,                  /* wcChar46 */
+    ',', 0x00,                  /* wcChar47 */
+    '0', 0x00,                  /* wcChar48 */
+    '1', 0x00,                  /* wcChar49 */
+    '*', 0x00,                  /* wcChar50*/
+    '1', 0x00,                  /* wcChar51 */
+    '2', 0x00,                  /* wcChar52 */
+    '8', 0x00,                  /* wcChar53 */
+    'K', 0x00,                  /* wcChar54 */
+    'g', 0x00,                  /* wcChar55 */
 
 #ifdef CONFIG_USB_HS
     ///////////////////////////////////////

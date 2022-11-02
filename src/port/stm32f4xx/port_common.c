@@ -6,7 +6,7 @@
 
 #include "stm32f4xx_hal.h"
 
-/* flash parameters that we should not really know */
+/*!< flash parameters that we should not really know */
 static const uint32_t sector_size[] = {
     // First 4 sectors are for bootloader (64KB)
     16 * 1024,
@@ -66,16 +66,16 @@ static bool flash_erase(uint32_t addr)
     uint32_t size = 0;
 
     for (uint32_t i = 0; i < SECTOR_COUNT; i++) {
-        // lgk_boot_log(sector_addr < FLASH_BASE_ADDR + BOARD_FLASH_SIZE);
-
-        size = sector_size[i];
-        if (sector_addr + size > addr) {
-            sector = i;
-            erased = erased_sectors[i];
-            erased_sectors[i] = 1; // don't erase anymore - we will continue writing here!
-            break;
+        if (sector_addr < FLASH_BASE_ADDR + BOARD_FLASH_SIZE) {
+            size = sector_size[i];
+            if (sector_addr + size > addr) {
+                sector = i;
+                erased = erased_sectors[i];
+                erased_sectors[i] = 1; // don't erase anymore - we will continue writing here!
+                break;
+            }
+            sector_addr += size;
         }
-        sector_addr += size;
     }
 
     if (!erased && !is_blank(sector_addr, size)) {
@@ -121,54 +121,67 @@ void lgk_boot_deley_ms(uint32_t ms)
 
 void lgk_boot_jump_app(uint32_t app_add)
 {
-    // volatile uint32_t const *app_vector = (volatile uint32_t const *)BOARD_FLASH_APP_START;
+    (void)app_add;
+    volatile uint32_t const *app_vector = (volatile uint32_t const *)BOARD_FLASH_APP_START;
+    uint32_t sp = app_vector[0];
+    uint32_t app_entry = app_vector[1];
 
-    // __HAL_RCC_GPIOA_CLK_DISABLE();
-    // __HAL_RCC_GPIOB_CLK_DISABLE();
-    // __HAL_RCC_GPIOC_CLK_DISABLE();
-    // __HAL_RCC_GPIOD_CLK_DISABLE();
+    /*!< switch exception handlers to the application  */
+    SCB->VTOR = (uint32_t)BOARD_FLASH_APP_START;
 
-    // HAL_RCC_DeInit();
+    /*!< Set stack pointer */
+    __set_MSP(sp);
+    __set_PSP(sp);
 
-    // SysTick->CTRL = 0;
-    // SysTick->LOAD = 0;
-    // SysTick->VAL = 0;
-
-    // /* Disable all interrupts */
-    // RCC->CIER = 0x00000000U;
-
-    // // TODO protect bootloader region
-
-    // /* switch exception handlers to the application */
-    // SCB->VTOR = (uint32_t)BOARD_FLASH_APP_START;
-
-    // // Set stack pointer
-    // __set_MSP(app_vector[0]);
-
-    // // Jump to Application Entry
-    // asm("bx %0" ::"r"(app_vector[1]));
+    /*!< Jump to Application Entry */
+    asm("bx %0" ::"r"(app_entry));
 }
 
 void lgk_boot_sys_reset(void)
 {
     lgk_boot_log("lgk_boot_sys_reset \r\n");
-    lgk_boot_deley_ms(10);
+
+    __HAL_RCC_GPIOA_CLK_DISABLE();
+    __HAL_RCC_GPIOB_CLK_DISABLE();
+    __HAL_RCC_GPIOC_CLK_DISABLE();
+#ifdef __HAL_RCC_GPIOD_CLK_DISABLE
+    __HAL_RCC_GPIOD_CLK_DISABLE();
+#endif
+
+    HAL_RCC_DeInit();
+
+    SysTick->CTRL = 0;
+    SysTick->LOAD = 0;
+    SysTick->VAL = 0;
+
+    /*!< Disable all Interrupts */
+    NVIC->ICER[0] = 0xFFFFFFFF;
+    NVIC->ICER[1] = 0xFFFFFFFF;
+    NVIC->ICER[2] = 0xFFFFFFFF;
+    NVIC->ICER[3] = 0xFFFFFFFF;
+
     NVIC_SystemReset();
 }
 
 bool lgk_boot_app_is_vaild(uint32_t check_code_add)
 {
+    (void)check_code_add;
     volatile uint32_t const *app_vector = (volatile uint32_t const *)BOARD_FLASH_APP_START;
+    uint32_t sp = app_vector[0];
+    uint32_t app_entry = app_vector[1];
+    lgk_boot_log("sp: %08lx \r\n", sp);
+    lgk_boot_log("app_entry: %08lx \r\n", app_entry);
 
-    // 1st word is stack pointer (should be in SRAM region)
-    if (app_vector[0] < BOARD_STACK_APP_START || app_vector[0] > BOARD_STACK_APP_END) {
+    /*!< 1st word is stack pointer (must be in SRAM region) */
+    if ((sp & 0xff000003) != 0x20000000) {
         return false;
     }
 
-    // 2nd word is App entry point (reset)
-    if (app_vector[1] < BOARD_FLASH_APP_START || app_vector[1] > BOARD_FLASH_APP_START + BOARD_FLASH_SIZE) {
+    /*!< 2nd word is App entry point (reset) */
+    if (app_entry < BOARD_FLASH_APP_START || app_entry > BOARD_FLASH_APP_START + BOARD_FLASH_SIZE) {
         return false;
     }
+
     return true;
 }
 

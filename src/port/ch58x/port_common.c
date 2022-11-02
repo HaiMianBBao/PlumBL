@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include "lgk_boot_core.h"
 
-/*!< mcu */
 #include "CH58x_common.h"
-
-#define APP_FLASH_SIZE (BOARD_FLASH_SIZE - APP_START_ADDRESS)
 
 void lgk_boot_deley_ms(uint32_t ms)
 {
@@ -15,6 +12,7 @@ void lgk_boot_deley_ms(uint32_t ms)
 
 void lgk_boot_jump_app(uint32_t app_add)
 {
+    (void)app_add;
     jumpApp();
 }
 
@@ -27,6 +25,7 @@ void lgk_boot_sys_reset(void)
 
 bool lgk_boot_app_is_vaild(uint32_t check_code_add)
 {
+    (void)check_code_add;
 #if 0
     uint32_t app_check;
     lgk_boot_flash_read(check_code_add, (uint32_t *)&app_check, 1);

@@ -22,9 +22,9 @@ if(DEBUG)
 sdk_add_compile_definitions(-DLGK_BOOT_DEBUG=1)
 endif()
 
-if(${BL_TYPE} STREQUAL "st_dfu")
+if(${BL_TYPE} STREQUAL "dfu")
 sdk_add_compile_definitions(-DUSB_REQUEST_BUFFER_SIZE=4096)
-sdk_add_compile_definitions(-DUSBD_DFU_APP_DEFAULT_ADD=0x10000)
+sdk_add_compile_definitions(-DUSBD_DFU_APP_DEFAULT_ADD=0x08010000)
 sdk_add_compile_definitions(-DUSBD_DFU_XFER_SIZE=4096)
 endif()
 

@@ -1,5 +1,5 @@
 # PLUM_BOOTLOADER
-This is a lightweight microcontroller bootloader. At present, you can use u2f, st dfu tools, to complete the firmware upgrade. At the same time, it is also portable and can be easily transplanted to other chips. It only needs to implement the interface under the port folder. At present, I have finished the transplantation of ch58x series.
+This is a lightweight microcontroller bootloader. At present, you can use u2f, dfu-util.exe tools, to complete the firmware upgrade. At the same time, it is also portable and can be easily transplanted to other chips. It only needs to implement the interface under the port folder. At present, I have finished the transplantation of ch58x series.
 
 This PlumUSB is written when learning CherryUSB. You can replace it with CherryUSB. I'll change to CherryUSB later.
 
@@ -20,10 +20,10 @@ cd examples/ch58x
 make or make BL_TYPE=uf2
 ```
 
-## st_dfu
+## dfu
 ```
 cd examples/ch58x
-make BL_TYPE=st_dfu
+make BL_TYPE=dfu
 ```
 
 # Make APP file
@@ -38,10 +38,10 @@ python uf2conv.py xxx.hex -o xxx.uf2 -c -f 0xbeefc582
 ```
 The you can drag the .uf2 file into the u disk to download.
 
-## st_dfu
+## dfu
 DfuSeDemo is the official dfu burning software of ST, but it needs to make bin files into dfu files before it can be used. When you install DfuSeDemo, the production software of bin to dfu will be automatically installed. You can choose this method, but I do not recommend it.
 
-Another way to use dfu on windows is through dfu_util.exe. Other platforms need to be explored on your own. The windows steps are as follows:
+Another way to use dfu on windows is through dfu-util.exe. Other platforms need to be explored on your own. The windows steps are as follows:
 
 ### Step1
 Run zadig-2.7.exe under the utils folder and make sure your device is in dfu mode.

@@ -11,9 +11,10 @@ void lgk_boot_deley_ms(uint32_t ms)
     HAL_Delay(ms);
 }
 
-typedef void (*pFunction)(void);
 void lgk_boot_jump_app(uint32_t app_add)
 {
+    (void)app_add;
+    typedef void (*pFunction)(void);
     pFunction JumpToApplication;
     uint32_t JumpAddress;
     /* Jump to user application */
@@ -71,6 +72,7 @@ void lgk_boot_sys_reset(void)
 
 bool lgk_boot_app_is_vaild(uint32_t check_code_add)
 {
+    (void)check_code_add;
     volatile uint32_t const *app_vector = (volatile uint32_t const *)BOARD_FLASH_APP_START;
 
     /*!< 1st word is stack pointer (should be in SRAM region) */
@@ -214,4 +216,3 @@ bool lgk_boot_hard_is_enter(void)
 #endif
     return false;
 }
-

@@ -2,8 +2,8 @@
 #include "lg_usbd_dfu.h"
 #include "lgk_boot_core.h"
 
-#define USBD_VID 0x0483
-#define USBD_PID 0xDF11
+#define USBD_VID 0x0903
+#define USBD_PID 0x0220
 #define USBD_MAX_POWER 100
 #define USBD_LANGID_STRING 1033
 

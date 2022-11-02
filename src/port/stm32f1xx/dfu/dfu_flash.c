@@ -2,12 +2,12 @@
 #include "lg_usbd_dfu.h"
 #include "lgk_boot_core.h"
 
-#define USBD_VID 0x0483
-#define USBD_PID 0xDF11
+#define USBD_VID 0x0903
+#define USBD_PID 0x0220
 #define USBD_MAX_POWER 100
 #define USBD_LANGID_STRING 1033
 
-#define FLASH_DESC_STR "@Internal Flash   /0x00000000/16*004Ka,096*04Kg"
+#define FLASH_DESC_STR "@Internal Flash   /0x08000000/16*001Ka,048*01Kg"
 
 #define USB_CONFIG_SIZE (9 + 9 + 9)
 
@@ -94,7 +94,7 @@ const uint8_t dfu_flash_descriptor[] = {
     '0', 0x00,                  /* wcChar19 */
     'x', 0x00,                  /* wcChar20 */
     '0', 0x00,                  /* wcChar21*/
-    '0', 0x00,                  /* wcChar22 */
+    '8', 0x00,                  /* wcChar22 */
     '0', 0x00,                  /* wcChar23 */
     '0', 0x00,                  /* wcChar24 */
     '0', 0x00,                  /* wcChar25 */
@@ -107,16 +107,16 @@ const uint8_t dfu_flash_descriptor[] = {
     '*', 0x00,                  /* wcChar32 */
     '0', 0x00,                  /* wcChar33 */
     '0', 0x00,                  /* wcChar34 */
-    '4', 0x00,                  /* wcChar35 */
+    '1', 0x00,                  /* wcChar35 */
     'K', 0x00,                  /* wcChar36 */
     'a', 0x00,                  /* wcChar37 */
     ',', 0x00,                  /* wcChar38 */
     '0', 0x00,                  /* wcChar39 */
-    '9', 0x00,                  /* wcChar40 */
-    '6', 0x00,                  /* wcChar41*/
+    '4', 0x00,                  /* wcChar40 */
+    '8', 0x00,                  /* wcChar41*/
     '*', 0x00,                  /* wcChar42 */
     '0', 0x00,                  /* wcChar43 */
-    '4', 0x00,                  /* wcChar44 */
+    '1', 0x00,                  /* wcChar44 */
     'K', 0x00,                  /* wcChar45 */
     'g', 0x00,                  /* wcChar46 */
 

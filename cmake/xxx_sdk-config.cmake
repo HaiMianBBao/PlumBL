@@ -13,7 +13,6 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 set_property(GLOBAL APPEND PROPERTY SOURCE_LIST)
 set_property(GLOBAL APPEND PROPERTY INCLUDE_LIST)
 set_property(GLOBAL APPEND PROPERTY LINKLIB_LIST)
-set_property(GLOBAL PROPERTY LINK_DIR)
 
 #添加一个接口库 所有跟SDK有关的都将被链接到这个库
 add_library(sdk_intf_lib INTERFACE)
@@ -28,10 +27,9 @@ add_library(sdk_intf_lib INTERFACE)
 include(${SDK_BASE}/cmake/toolchain.cmake)
 include(${SDK_BASE}/cmake/extension.cmake)
 # include(${SDK_BASE}/cmake/compiler_flags.cmake)
-# include(${SDK_BASE}/app.cmake)
 
 # sdk_add_compile_options_ifdef(CONFIG_DEBUG -g3)
-sdk_add_compile_options(-Os)
+# sdk_add_compile_options(-Os)
 
 enable_language(C CXX ASM)
 
