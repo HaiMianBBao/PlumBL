@@ -44,10 +44,10 @@ SOFTWARE.
 #define USB_MANUFACTURER    "LG Studio"
 #define USB_PRODUCT         "Plum Bootloader"
 #define UF2_PRODUCT_NAME     USB_MANUFACTURER " " USB_PRODUCT
-#define UF2_BOARD_ID         "Plum Bootloader for CH582"
+#define UF2_BOARD_ID         "Plum Bootloader for STM32L433"
 #define UF2_INDEX_URL        "https://www.lg_studio.com/"
-#define UF2_VOLUME_LABEL     "CH582-Plum"
-#define BOARD_UF2_FAMILY_ID  0xbeefc582
+#define UF2_VOLUME_LABEL     "STM32L4Plum"
+#define BOARD_UF2_FAMILY_ID  0xabcd1433
 #define TINYUF2_FAVICON_HEADER   "favicon_adafruit_256.h"
 
 // The largest flash size that is supported by the board, in bytes, default is 4MB

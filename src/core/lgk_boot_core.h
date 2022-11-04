@@ -2,12 +2,31 @@
 
 #include <stdio.h>
 
-#define DBRST_TAP_MAGIC            0xf01669ef // Enter DFU magic
-#define DBRST_TAP_MAGIC_QUICK_BOOT 0xf02669ef // Skip double tap delay detection
-#define DBRST_TAP_MAGIC_ERASE_APP  0xf5e80ab4 // Erase entire application !!
+#define DBRST_TAP_MAGIC            0xf01669ef /*!< Enter Bootloader magic */
+#define DBRST_TAP_MAGIC_QUICK_BOOT 0xf02669ef /*!< Skip double tap delay detection */
+#define DBRST_TAP_MAGIC_ERASE_APP  0xf5e80ab4 /*!< Erase entire application */
 
 #define HARD_ENTER_BL_WAY_GPIO   0
 #define HARD_ENTER_BL_WAY_DB_RST 1
+
+#ifndef JUMP_APP_FLAG
+#define JUMP_APP_FLAG 0xc903a520 /*!< Jump to app flag */
+#endif
+
+#ifndef JUMP_BOOT_FLAG
+#define JUMP_BOOT_FLAG 0xc220b134 /*!< Jump to bootloader flag */
+#endif
+
+/**
+ * You need to implement your own way to check whether you can jump to the app
+ */
+#ifndef APP_CHECK_CODE_ADD
+#define APP_CHECK_CODE_ADD 0x00 /*!< Check lgk firmware flag's address */
+#endif
+
+#ifndef APP_CHECK_CODE
+#define APP_CHECK_CODE 0xbeefbeef /*!< Check lgk firmware flag */
+#endif
 
 #include "port_common.h"
 

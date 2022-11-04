@@ -47,7 +47,7 @@ SOFTWARE.
 #define UF2_BOARD_ID         "Plum Bootloader for CH582"
 #define UF2_INDEX_URL        "https://www.lg_studio.com/"
 #define UF2_VOLUME_LABEL     "CH582-Plum"
-#define BOARD_UF2_FAMILY_ID  0xbeefc582
+#define BOARD_UF2_FAMILY_ID  0xabcdc582
 #define TINYUF2_FAVICON_HEADER   "favicon_adafruit_256.h"
 
 // The largest flash size that is supported by the board, in bytes, default is 4MB

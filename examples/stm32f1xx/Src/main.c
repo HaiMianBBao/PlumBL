@@ -22,6 +22,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <errno.h>
 #ifdef RTT_VIEWER
 #include "SEGGER_RTT.h"
 #endif
@@ -68,13 +71,15 @@ void usb_dc_low_level_init(void)
 
 int __io_putchar(int ch)
 {
-#ifdef DRTT_VIEWER
+#ifdef RTT_VIEWER
     SEGGER_RTT_PutChar(0, ch);
 #endif
-    // while ((USART1->SR & USART_SR_TXE) == 0) {
-    // }
-    // USART1->DR = ch;
     return ch;
+}
+
+int __io_getchar(void)
+{
+    return 0;
 }
 
 int _write(int fd, char *pBuffer, int size)
@@ -84,6 +89,55 @@ int _write(int fd, char *pBuffer, int size)
         __io_putchar(*pBuffer++);
     }
     return size;
+}
+
+__attribute__((weak)) int _read(int file, char *ptr, int len)
+{
+    (void)file;
+    int DataIdx;
+    for (DataIdx = 0; DataIdx < len; DataIdx++) {
+        *ptr++ = __io_getchar();
+    }
+    return len;
+}
+
+__attribute__((weak)) int _isatty(int fd)
+{
+    if (fd >= STDIN_FILENO && fd <= STDERR_FILENO)
+        return 1;
+
+    errno = EBADF;
+    return 0;
+}
+
+__attribute__((weak)) int _close(int fd)
+{
+    if (fd >= STDIN_FILENO && fd <= STDERR_FILENO)
+        return 0;
+
+    errno = EBADF;
+    return -1;
+}
+
+__attribute__((weak)) int _lseek(int fd, int ptr, int dir)
+{
+    (void)fd;
+    (void)ptr;
+    (void)dir;
+
+    errno = EBADF;
+    return -1;
+}
+
+__attribute__((weak)) int _fstat(int fd, struct stat *st)
+{
+    if (fd >= STDIN_FILENO && fd <= STDERR_FILENO) {
+        st->st_mode = S_IFCHR;
+        return 0;
+    }
+
+    errno = EBADF;
+    return 0;
 }
 
 /* USER CODE END 0 */
@@ -147,7 +201,7 @@ void SystemClock_Config(void)
   */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    
+
     if (HSE_VALUE == 8000000) {
         RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
     } else if (HSE_VALUE == 16000000) {

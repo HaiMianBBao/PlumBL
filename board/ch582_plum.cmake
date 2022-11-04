@@ -9,6 +9,5 @@ sdk_set_linker_script(${CMAKE_CURRENT_SOURCE_DIR}/Ld/plum_boot.ld)
 sdk_add_link_options(-nostartfiles
                 -Xlinker --gc-sections  
                 -Wl,--print-memory-usage 
-                # -Wl,-Map,${PROJECT_NAME}.map 
                 --specs=nano.specs 
                 --specs=nosys.specs)

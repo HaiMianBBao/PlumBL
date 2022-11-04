@@ -1,18 +1,5 @@
 #pragma once
 
-#define JUMP_APP_FLAG  0x1122c582 /*!< Jump to app flag */
-#define JUMP_BOOT_FLAG 0x3344c582 /*!< Jump to bootloader flag */
-
-/**
- * You need to implement your own way to check whether you can jump to the app
- */
-#define APP_CHECK_CODE_ADD 0x00       /*!< Check lgk firmware flag's address */
-#define APP_CHECK_CODE     0xbeefbeef /*!< Check lgk firmware flag */
-
-/**
- * 
- */
-// #define LGK_BOOT_DEBUG  0
 #define HARD_ENTER_BOOT 1
 #if HARD_ENTER_BOOT
 #define HARD_ENTER_BL_WAY HARD_ENTER_BL_WAY_DB_RST

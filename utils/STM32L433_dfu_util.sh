@@ -1,0 +1,1 @@
+dfu-util.exe -d 0903:0220 -s 0x08010000:leave -D stm32l433_test.bin

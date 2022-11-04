@@ -23,7 +23,7 @@ void lgk_boot_sys_reset(void)
     SYS_ResetExecute();
 }
 
-bool lgk_boot_app_is_vaild(uint32_t check_code_add)
+__attribute__((weak)) bool lgk_boot_app_is_vaild(uint32_t check_code_add)
 {
     (void)check_code_add;
 #if 0

@@ -12,15 +12,14 @@ sdk_add_compile_options(-mcpu=cortex-m3
                         -fdata-sections 
                         -ffunction-sections
                         -g
-                        -specs=nano.specs 
-                        -specs=nosys.specs
+                        --specs=nano.specs 
+                        --specs=nosys.specs
                         )
 
 sdk_add_link_options(-mcpu=cortex-m3 
                      -mthumb 
-                     -specs=nano.specs 
-                     -lc -lm -lnosys 
+                     --specs=nano.specs 
+                     -lc -lm
                      -Wl,--cref -Wl,--gc-sections 
-                    #  -Wl,-Map,${PROJECT_NAME}.map 
-                     -specs=nosys.specs
+                     --specs=nosys.specs
                     )
