@@ -13,7 +13,7 @@
 
 #define USB_CONFIG_SIZE (9 + MSC_DESCRIPTOR_LEN)
 
-const uint8_t msc_ram_descriptor[] = {
+const uint8_t msc_flash_descriptor[] = {
     USB_DEVICE_DESCRIPTOR_INIT(USB_2_0, 0x00, 0x00, 0x00, USBD_VID, USBD_PID, 0x0200, 0x01),
     USB_CONFIG_DESCRIPTOR_INIT(USB_CONFIG_SIZE, 0x01, 0x01, USB_CONFIG_BUS_POWERED, USBD_MAX_POWER),
     MSC_DESCRIPTOR_INIT(0x00, MSC_OUT_EP, MSC_IN_EP, 0x02),
@@ -40,10 +40,10 @@ const uint8_t msc_ram_descriptor[] = {
     ///////////////////////////////////////
     0x1e,                       /* bLength */
     USB_DESCRIPTOR_TYPE_STRING, /* bDescriptorType */
-    'L', 0x00,                  /* wcChar0 */
-    'G', 0x00,                  /* wcChar1 */
-    'K', 0x00,                  /* wcChar2 */
-    ' ', 0x00,                  /* wcChar3 */
+    'P', 0x00,                  /* wcChar0 */
+    'l', 0x00,                  /* wcChar1 */
+    'u', 0x00,                  /* wcChar2 */
+    'm', 0x00,                  /* wcChar3 */
     'B', 0x00,                  /* wcChar4 */
     'o', 0x00,                  /* wcChar5 */
     'o', 0x00,                  /* wcChar6 */
@@ -142,7 +142,7 @@ int usbd_msc_sector_write(uint32_t sector, uint8_t *buffer, uint32_t length)
  */
 void msc_flash_init(void)
 {
-    usbd_desc_register(msc_ram_descriptor);
+    usbd_desc_register(msc_flash_descriptor);
     usbd_msc_class_init(MSC_OUT_EP, MSC_IN_EP);
 
     extern int usb_dc_init(void);

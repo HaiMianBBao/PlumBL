@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-file(GLOB_RECURSE PlumUSB_SOURCES
+file(GLOB PlumUSB_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/PlumUSB/core/lg_usbd_core.c"
     "${CMAKE_CURRENT_LIST_DIR}/PlumUSB/port/${USBIP}/*.c"
     "${CMAKE_CURRENT_LIST_DIR}/PlumUSB/class/msc/lg_usbd_msc.c"
