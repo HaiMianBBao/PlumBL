@@ -1,18 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
-message("examples/ch58x plum bootloader start")
-
-find_package(xxx_sdk REQUIRED HINTS $ENV{SDK_BASE})
-
+find_package(plumbl_sdk REQUIRED HINTS $ENV{PLUMBL_SDK_BASE})
 sdk_append_inc(.)
-
-get_property(SRC_LIST GLOBAL PROPERTY SOURCE_LIST)
-get_property(INC_LIST GLOBAL PROPERTY INCLUDE_LIST)
-get_property(LIB_LIST GLOBAL PROPERTY LINKLIB_LIST)
-
-sdk_generate_library()
-sdk_add_include_directories(${INC_LIST})
-sdk_library_add_sources(${SRC_LIST})
 
 if(DEBUG)
 sdk_add_compile_definitions(-DDEBUG=1)
@@ -28,5 +17,3 @@ endif()
 sdk_set_main_file(main.c)
 
 project(${CHIP}_${BL_TYPE})
-
-message("examples/ch58x plum bootloader end")

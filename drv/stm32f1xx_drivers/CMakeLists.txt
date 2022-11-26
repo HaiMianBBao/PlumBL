@@ -22,4 +22,4 @@ sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/STM32F1xx_HAL_Driver/Src/stm32f1xx_h
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c)
 
 sdk_add_compile_definitions(-DUSE_HAL_DRIVER)
-include($ENV{SDK_BASE}/board/${BOARD}.cmake)
+include($ENV{PLUMBL_SDK_BASE}/board/${BOARD}.cmake)

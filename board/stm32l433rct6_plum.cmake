@@ -1,8 +1,8 @@
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_STANDARD 99)
 
-sdk_append_source($ENV{SDK_BASE}/board/startup/startup_stm32l433xx.s)
-sdk_set_linker_script($ENV{SDK_BASE}/board/linker/STM32L433RCTx_FLASH.ld)
+sdk_append_source($ENV{PLUMBL_SDK_BASE}/board/startup/startup_stm32l433xx.s)
+sdk_set_linker_script($ENV{PLUMBL_SDK_BASE}/board/linker/STM32L433RCTx_FLASH.ld)
 sdk_add_compile_definitions(-DSTM32L433xx)
 
 sdk_add_compile_options(-mcpu=cortex-m4 

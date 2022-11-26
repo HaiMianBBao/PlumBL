@@ -9,5 +9,5 @@ sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/StdPeriphDriver/CH58x_uart1.c)
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/Startup/startup_CH583.S)
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/RVMSIS/core_riscv.S)
 sdk_add_link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/StdPeriphDriver/libISP583.a)
-include($ENV{SDK_BASE}/board/${BOARD}.cmake)
+include($ENV{PLUMBL_SDK_BASE}/board/${BOARD}.cmake)
 

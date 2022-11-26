@@ -125,7 +125,12 @@ macro(project name)
   set(MAP_FILE ${build_dir}/${name}.map)
   set(ASM_FILE ${build_dir}/${name}.asm)
 
-  add_executable(${name}.elf ${CURRENT_MAIN_FILE})
+  get_property(SRC_LIST GLOBAL PROPERTY SOURCE_LIST)
+  get_property(INC_LIST GLOBAL PROPERTY INCLUDE_LIST)
+  
+  include_directories(${INC_LIST})
+  add_executable(${name}.elf ${CURRENT_MAIN_FILE} ${SRC_LIST})
+
   target_link_libraries(${name}.elf sdk_intf_lib)
   get_property(LINKER_SCRIPT_PROPERTY GLOBAL PROPERTY LINKER_SCRIPT)
   if(EXISTS ${LINKER_SCRIPT_PROPERTY})
@@ -135,15 +140,13 @@ macro(project name)
 
   get_property(SDK_LIBS_PROPERTY GLOBAL PROPERTY SDK_LIBS)
   # target_link_libraries(${name}.elf -Wl,--start-group ${SDK_LIBS_PROPERTY} app -Wl,--end-group)
-
-  # target_link_libraries(${name}.elf -Wl,--start-group  ${SDK_LIBS_PROPERTY} -Wl,--end-group)
-  target_link_libraries(${name}.elf -Wl,--start-group -Wl,--whole-archive ${SDK_LIBS_PROPERTY} -Wl,--no-whole-archive -Wl,--end-group)
+  target_link_libraries(${name}.elf -Wl,--start-group  ${SDK_LIBS_PROPERTY} -Wl,--end-group)
+  # target_link_libraries(${name}.elf -Wl,--start-group -Wl,--whole-archive ${SDK_LIBS_PROPERTY} -Wl,--no-whole-archive -Wl,--end-group)
   
   add_custom_command(TARGET ${name}.elf POST_BUILD
   COMMAND ${CMAKE_OBJCOPY} -Obinary $<TARGET_FILE:${name}.elf> ${BIN_FILE}
   COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${name}.elf> ${HEX_FILE}
   COMMAND ${CMAKE_OBJDUMP} -d -S $<TARGET_FILE:${name}.elf> >${ASM_FILE}
-  # COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${mainname}.elf> ${HEX_FILE}
   COMMAND ${SIZE} $<TARGET_FILE:${name}.elf>
   COMMENT "Generate ${BIN_FILE}\r\n")
 

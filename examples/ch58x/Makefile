@@ -1,39 +1,13 @@
 SDK_DEMO_PATH ?= .
-SDK_BASE = $(SDK_DEMO_PATH)/../..
-export SDK_BASE
-
-ifeq ($(OS),Windows_NT)
-CMAKE = $(SDK_BASE)/tools/cmake/bin/cmake.exe
-else
-CMAKE = $(SDK_BASE)/tools/cmake/bin/cmake
-endif
-
-RM = $(CMAKE) -E remove_directory
+PLUMBL_SDK_BASE = $(SDK_DEMO_PATH)/../..
+export PLUMBL_SDK_BASE
 
 BL_TYPE?=uf2
 DEBUG?=n
+CHIP?=ch58x
+CHIP_FAMILY?=ch58x
+BOARD?=ch582_plum
+USBIP?=ch58x
+TOOLCHAIN_PREFIX ?= riscv-none-embed-
 
-#cmake definition config
-cmake_definition+= -DTOOLCHAIN_PREFIX=riscv-none-embed-
-cmake_definition+= -DCHIP_FAMILY=ch58x
-cmake_definition+= -DCHIP=ch58x
-cmake_definition+= -DUSBIP=ch58x
-cmake_definition+= -DBOARD=ch582_plum
-# cmake_definition+= -DCONFIG_DEBUG=y
-cmake_definition+= -DDEBUG=${DEBUG}
-cmake_definition+= -DBL_TYPE=${BL_TYPE}
-
-# all:
-# 	@echo ${SDK_BASE}
-
-build:Makefile
-	$(CMAKE) -S . -B build -G "Unix Makefiles" $(cmake_definition)
-	cd build && make -j4
-
-clean:
-	$(RM) build
-
-# menuconfig:
-# 	python ../../tools/kconfig/menuconfig.py
-
-# .PHONY:build clean menuconfig
+include $(PLUMBL_SDK_BASE)/project.build

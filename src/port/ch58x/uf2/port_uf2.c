@@ -7,8 +7,6 @@
 
 #include "CH58x_common.h"
 
-void USB_IRQHandler(void);
-
 /*!< Port for uf2 */
 void lgk_boot_port_intf_init(void)
 {
@@ -20,6 +18,7 @@ void lgk_boot_port_intf_init(void)
     msc_flash_init();
 
     PFIC_EnableIRQ(USB_IRQn);
+    extern void USB_IRQHandler(void);
     PFIC_EnableFastINT0(USB_IRQn, (uint32_t)(void *)USB_IRQHandler);
 }
 

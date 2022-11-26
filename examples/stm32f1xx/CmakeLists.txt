@@ -1,22 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
 
-message("examples/stm32f1xx plum bootloader start")
-
-find_package(xxx_sdk REQUIRED HINTS $ENV{SDK_BASE})
+find_package(plumbl_sdk REQUIRED HINTS $ENV{PLUMBL_SDK_BASE})
 
 sdk_append_inc(Inc)
 sdk_append_inc(.)
 sdk_append_source(Src/stm32f1xx_hal_msp.c)
 sdk_append_source(Src/stm32f1xx_it.c)
 sdk_append_source(Src/system_stm32f1xx.c)
-
-get_property(SRC_LIST GLOBAL PROPERTY SOURCE_LIST)
-get_property(INC_LIST GLOBAL PROPERTY INCLUDE_LIST)
-get_property(LIB_LIST GLOBAL PROPERTY LINKLIB_LIST)
-
-sdk_generate_library()
-sdk_add_include_directories(${INC_LIST})
-sdk_library_add_sources(${SRC_LIST})
 
 if(DEBUG)
 sdk_add_compile_definitions(-DLGK_BOOT_DEBUG=1)
@@ -28,12 +18,9 @@ sdk_add_compile_definitions(-DUSBD_DFU_APP_DEFAULT_ADD=0x08005000)
 sdk_add_compile_definitions(-DUSBD_DFU_XFER_SIZE=4096)
 endif()
 
-
 sdk_add_compile_definitions(-DHSE_VALUE=8000000U)
 sdk_add_compile_definitions(-DCOMPLETE_DELAY=50)
 
 sdk_set_main_file(Src/main.c)
 
 project(${CHIP}_${BL_TYPE})
-
-message("examples/stm32f1xx plum bootloader end")

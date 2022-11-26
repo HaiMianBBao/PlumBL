@@ -23,4 +23,4 @@ sdk_append_inc(${CMAKE_CURRENT_SOURCE_DIR}/STM32F4xx_HAL_Driver/Inc/Legacy)
 sdk_append_inc(${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Device/ST/STM32F4xx/Include)
 sdk_append_inc(${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Include)
 
-include($ENV{SDK_BASE}/board/${BOARD}.cmake)
+include($ENV{PLUMBL_SDK_BASE}/board/${BOARD}.cmake)

@@ -1,0 +1,34 @@
+ifeq ($(OS),Windows_NT)
+CMAKE = $(PLUMBL_SDK_BASE)/tools/cmake/bin/cmake.exe
+else
+CMAKE = $(PLUMBL_SDK_BASE)/tools/cmake/bin/cmake
+endif
+
+RM = $(CMAKE) -E remove_directory
+
+#cmake definition config
+cmake_definition+= -DTOOLCHAIN_PREFIX=${TOOLCHAIN_PREFIX}
+cmake_definition+= -DCHIP_FAMILY=${CHIP_FAMILY}
+cmake_definition+= -DCHIP=${CHIP}
+cmake_definition+= -DUSBIP=${USBIP}
+cmake_definition+= -DBOARD=${BOARD}
+cmake_definition+= -DDEBUG=${DEBUG}
+cmake_definition+= -DBL_TYPE=${BL_TYPE}
+cmake_definition+= -DRTT_VIEWER=${RTT_VIEWER}
+                                                
+build:Makefile
+	$(CMAKE) -S . -B build -G "Unix Makefiles" $(cmake_definition)
+	cd build && make -j4
+
+ninja:
+	$(CMAKE) -S . -B build -G "Ninja" $(cmake_definition)
+	cd build && ninja -j4
+
+clean:
+	$(RM) build
+
+menuconfig:
+	python $(PLUMBL_SDK_BASE)/tools/kconfig/menuconfig.py
+
+.PHONY:build clean menuconfig
+
