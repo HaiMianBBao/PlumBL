@@ -9,6 +9,7 @@ sdk_append_source(Src/stm32f1xx_it.c)
 sdk_append_source(Src/system_stm32f1xx.c)
 
 if(DEBUG)
+message(STATUS "${Red} Warring !! Please check the size you assigned to the bootloader flash. It may exceed this size after the log is enabled ${ColourReset}")  
 sdk_add_compile_definitions(-DLGK_BOOT_DEBUG=1)
 endif()
 
