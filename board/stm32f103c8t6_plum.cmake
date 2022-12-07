@@ -22,4 +22,5 @@ sdk_add_link_options(-mcpu=cortex-m3
                      -lc -lm
                      -Wl,--cref -Wl,--gc-sections 
                      --specs=nosys.specs
+                     -Wl,--no-warn-rwx-segments
                     )

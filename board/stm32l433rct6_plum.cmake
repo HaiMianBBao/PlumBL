@@ -23,4 +23,5 @@ sdk_add_link_options(-mcpu=cortex-m4
                      --specs=nano.specs 
                      -lc -lm
                      -Wl,--cref -Wl,--gc-sections 
-                     --specs=nosys.specs)
+                     --specs=nosys.specs
+                     -Wl,--no-warn-rwx-segments)
