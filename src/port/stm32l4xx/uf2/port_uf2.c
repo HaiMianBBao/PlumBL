@@ -38,11 +38,16 @@ void board_flash_read(uint32_t addr, void *buffer, uint32_t len)
 // Write to flash
 void board_flash_write(uint32_t addr, void const *data, uint32_t len)
 {
+    //TODO: Skip the same data in the future
+#if 0
     if (memcmp(data, (void *)addr, len) != 0) {
         /*!< Need write new array */
         lgk_boot_log("Write 0x%08lX\r\n", addr);
         lgk_boot_flash_write(addr, (void *)data, len);
     }
+#else
+    lgk_boot_flash_write(addr, (void *)data, len);
+#endif
 }
 
 // Flush/Sync flash contents
