@@ -28,6 +28,13 @@
 #define APP_CHECK_CODE 0xbeefbeef /*!< Check lgk firmware flag */
 #endif
 
+/**
+ * Boot system state
+ */
+#define BOOT_SYS_COMPLETED   1
+#define BOOT_SYS_DOWNLOADING 2
+#define BOOT_SYS_IDLE        3
+
 #include "port_common.h"
 
 #ifndef LGK_BOOT_DEBUG

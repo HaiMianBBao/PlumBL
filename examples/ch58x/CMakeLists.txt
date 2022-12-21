@@ -14,6 +14,14 @@ sdk_add_compile_definitions(-DUSBD_DFU_APP_DEFAULT_ADD=0x10000)
 sdk_add_compile_definitions(-DUSBD_DFU_XFER_SIZE=4096)
 endif()
 
+if(${BL_TYPE} STREQUAL "uf2")
+sdk_add_compile_definitions(-DUF2_BOARD_ID="Plum Bootloader for CH58x")
+sdk_add_compile_definitions(-DUF2_VOLUME_LABEL="CH582Plum")
+sdk_add_compile_definitions(-DBOARD_UF2_FAMILY_ID=0xabcdc582)
+endif()
+
+sdk_add_compile_definitions(-DPLUMBL_MCU_CH582)
+
 sdk_set_main_file(main.c)
 
 project(${CHIP}_${BL_TYPE})

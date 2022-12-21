@@ -1,0 +1,3 @@
+[submodule "CherryUSB"]
+	path = CherryUSB
+	url = git@github.com:sakumisu/CherryUSB.git

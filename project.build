@@ -11,6 +11,7 @@ cmake_definition+= -DTOOLCHAIN_PREFIX=${TOOLCHAIN_PREFIX}
 cmake_definition+= -DCHIP_FAMILY=${CHIP_FAMILY}
 cmake_definition+= -DCHIP=${CHIP}
 cmake_definition+= -DUSBIP=${USBIP}
+cmake_definition+= -DUSB_DCD=${USB_DCD}
 cmake_definition+= -DBOARD=${BOARD}
 cmake_definition+= -DDEBUG=${DEBUG}
 cmake_definition+= -DBL_TYPE=${BL_TYPE}

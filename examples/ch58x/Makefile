@@ -7,7 +7,8 @@ DEBUG?=n
 CHIP?=ch58x
 CHIP_FAMILY?=ch58x
 BOARD?=ch582_plum
-USBIP?=ch58x
+USBIP?=ch32
+USB_DCD?=usb_ch58x_dc_usbfs.c
 TOOLCHAIN_PREFIX ?= riscv-none-embed-
 
 include $(PLUMBL_SDK_BASE)/project.build

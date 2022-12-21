@@ -120,11 +120,9 @@ bool lgk_boot_hard_is_enter(void)
     return false;
 }
 
-/* isr function ------------------------------------------------------------------*/
-__attribute__((interrupt("WCH-Interrupt-fast")))
-__attribute__((section(".highcode"))) void
-USB_IRQHandler(void)
+void usb_dc_low_level_init(void)
 {
-    extern void usb_isr_handler(void);
-    usb_isr_handler();
+    extern void USB_IRQHandler(void);
+    PFIC_EnableIRQ(USB_IRQn);
+    PFIC_EnableFastINT0(USB_IRQn, (uint32_t)(void *)USB_IRQHandler);
 }

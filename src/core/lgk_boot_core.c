@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "lgk_boot_core.h"
-#include "lg_usbd_core.h"
+#include "usbd_core.h"
 
 volatile bool is_flashing_flag = 0;
 volatile bool flashing_start_flag = 0;
@@ -22,7 +22,7 @@ static uint8_t lgk_boot_process(void)
                 time_cout_0 = 0;
                 flashing_start_flag = 0;
                 lgk_boot_log("Format completed or firmware burning completed \r\n");
-                return 1;
+                return BOOT_SYS_COMPLETED;
             }
         } else if (is_flashing_flag == 1) {
             time_cout_0 = 0;
@@ -33,14 +33,14 @@ static uint8_t lgk_boot_process(void)
                 time_cout_1 = 0;
                 flashing_start_flag = 0;
                 lgk_boot_log("Format completed or firmware burning completed \r\n");
-                return 1;
+                return BOOT_SYS_COMPLETED;
             }
         }
 
         /*!< The format is not completed or the download is completed */
-        return 2;
+        return BOOT_SYS_DOWNLOADING;
     } else {
-        return 3;
+        return BOOT_SYS_IDLE;
     }
 }
 
@@ -62,7 +62,7 @@ void lgk_boot_main(void)
 
         uint16_t timeout_count = 0;
         /*!< Wait for USB enumeration to complete */
-        while (is_device_configured() == false) {
+        while (usb_device_is_configured() == false) {
             lgk_boot_deley_ms(1);
             timeout_count++;
             if (timeout_count > WAIT_TIME_OUT) {
@@ -76,7 +76,7 @@ void lgk_boot_main(void)
 
         while (1) {
             uint8_t process_state = lgk_boot_process();
-            if (process_state == 1) {
+            if (process_state == BOOT_SYS_COMPLETED) {
                 /*!< Format or download completed so we can check app */
                 if (lgk_boot_app_is_vaild(APP_CHECK_CODE_ADD)) {
                     lgk_boot_flag = JUMP_APP_FLAG;
@@ -84,9 +84,9 @@ void lgk_boot_main(void)
                     while (1) {
                     }
                 }
-            } else if (process_state == 2) {
+            } else if (process_state == BOOT_SYS_DOWNLOADING) {
                 /*!< Formatting or downloading firmware without doing anything */
-            } else if (process_state == 3) {
+            } else if (process_state == BOOT_SYS_IDLE) {
                 /*!< Firmware upgrade system is idle so we wait for WAIT_TIME_OUT/1000 s */
                 lgk_boot_deley_ms(1);
                 timeout_count++;
@@ -127,7 +127,7 @@ void lgk_boot_main(void)
             lgk_boot_log("force update mode \r\n");
             uint16_t timeout_count = 0;
             /*!< Wait for USB enumeration to complete */
-            while (is_device_configured() == false) {
+            while (usb_device_is_configured() == false) {
                 lgk_boot_deley_ms(1);
                 timeout_count++;
                 if (timeout_count > WAIT_TIME_OUT) {
@@ -142,7 +142,7 @@ void lgk_boot_main(void)
             while (1) {
                 uint8_t process_state = lgk_boot_process();
 
-                if (process_state == 1) {
+                if (process_state == BOOT_SYS_COMPLETED) {
                     if (lgk_boot_app_is_vaild(APP_CHECK_CODE_ADD)) {
                         lgk_boot_flag = JUMP_APP_FLAG;
                         lgk_boot_sys_reset();
