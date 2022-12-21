@@ -133,6 +133,11 @@ void lgk_boot_intf_init(void)
 
 void lgk_boot_sys_init(void)
 {
+    /* Check if the system was resumed from Standby mode */
+    if (__HAL_PWR_GET_FLAG(PWR_FLAG_SB) != RESET) {
+        /* Direct jump to app */
+        lgk_boot_jump_app(BOARD_FLASH_APP_START);
+    }
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
     /* Configure the system clock */
