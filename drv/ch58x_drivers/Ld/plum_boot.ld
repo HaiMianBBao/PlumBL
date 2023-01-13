@@ -2,7 +2,7 @@ ENTRY( _start )
 
 MEMORY
 {
-	FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 40K
+	FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 48K
 	/* 
 	BOOT (xrw) : ORIGIN = 0x20007ffc, LENGTH = 4
 	RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 32K - 8 

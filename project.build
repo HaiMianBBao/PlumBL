@@ -15,14 +15,15 @@ cmake_definition+= -DUSB_DCD=${USB_DCD}
 cmake_definition+= -DBOARD=${BOARD}
 cmake_definition+= -DDEBUG=${DEBUG}
 cmake_definition+= -DBL_TYPE=${BL_TYPE}
+cmake_definition+= -DUSE_MCU_BOOT=${USE_MCU_BOOT}
 cmake_definition+= -DRTT_VIEWER=${RTT_VIEWER}
                                                 
 build:Makefile
-	$(CMAKE) -S . -B build -G "Unix Makefiles" $(cmake_definition)
+	@$(CMAKE) -S . -B build -G "Unix Makefiles" $(cmake_definition)
 	cd build && make -j4
 
 ninja:
-	$(CMAKE) -S . -B build -G "Ninja" $(cmake_definition)
+	@$(CMAKE) -S . -B build -G "Ninja" $(cmake_definition)
 	cd build && ninja -j4
 
 clean:

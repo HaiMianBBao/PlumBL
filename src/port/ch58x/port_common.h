@@ -11,10 +11,8 @@
 extern uint32_t _eusrstack[];
 #define lgk_boot_flag _eusrstack[0]
 
-/* Port for uf2  ------------------------------------------------------------------*/
-/*!< Flash Start Address of Application */
-#ifndef BOARD_FLASH_APP_START
-#define BOARD_FLASH_APP_START 0x00010000
+#ifndef FLASH_BASE_ADDR
+#define FLASH_BASE_ADDR 0
 #endif
 
 #ifndef MIN_FLASH_ERASE_SIZE
@@ -27,6 +25,19 @@ extern uint32_t _eusrstack[];
 
 #ifndef BOARD_FLASH_SIZE
 #define BOARD_FLASH_SIZE (448 * 1024)
+#endif
+
+/**
+ * MCU Boot
+ */
+#define BOOT_START_ADDRESS  FLASH_BASE_ADDR
+#define APP_CODE_START_ADDR (BOOT_START_ADDRESS + 0x0000f000) /*!< 60k */
+#define APP_CODE_END_ADDR   (BOOT_START_ADDRESS + 0x00070000) /*!< 448k */
+#define HEAD_SIZE           0x1000                            /*!< 4K */
+
+/*!< Flash Start Address of Application */
+#ifndef BOARD_FLASH_APP_START
+#define BOARD_FLASH_APP_START (APP_CODE_START_ADDR + HEAD_SIZE)
 #endif
 
 #define APP_START_ADDRESS BOARD_FLASH_APP_START

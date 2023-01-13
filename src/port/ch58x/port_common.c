@@ -26,14 +26,24 @@ void lgk_boot_sys_reset(void)
 __attribute__((weak)) bool lgk_boot_app_is_vaild(uint32_t check_code_add)
 {
     (void)check_code_add;
-#if 0
-    uint32_t app_check;
-    lgk_boot_flash_read(check_code_add, (uint32_t *)&app_check, 1);
-    lgk_boot_log("app_check_0 %08x \r\n", app_check);
-    lgk_boot_deley_ms(10);
-    if (app_check == APP_CHECK_CODE) {
-        return true;
+#ifdef USE_MCU_BOOT
+    struct boot_rsp rsp;
+    fih_int rc = boot_go(&rsp);
+    if (rc == 0) {
+        uint32_t image_off = rsp.br_image_off;
+        uint32_t header_size = rsp.br_hdr->ih_hdr_size;
+        lgk_boot_log("Image found. header_size %d image_off %d\r\n",header_size, image_off);
+        if ((image_off + header_size) != BOARD_FLASH_APP_START) {
+            return false;
+        } else {
+            // return true;
+            goto common;
+        }
+    } else {
+        lgk_boot_log("Failed searching for a bootable image.\r\n");
+        return false;
     }
+common:
 #endif
     return true;
 }

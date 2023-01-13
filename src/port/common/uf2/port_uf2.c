@@ -36,10 +36,16 @@ void board_flash_read(uint32_t addr, void *buffer, uint32_t len)
 // Write to flash
 void board_flash_write(uint32_t addr, void const *data, uint32_t len)
 {
-    if (addr < BOARD_FLASH_APP_START) {
+#ifdef USE_MCU_BOOT
+    uint32_t limit_address = APP_CODE_START_ADDR;
+#else
+    uint32_t limit_address = BOARD_FLASH_APP_START;
+#endif
+    if (addr < limit_address) {
         lgk_boot_log("Error addr 0x%08lX will break the bootloader\r\n");
         return;
     }
+
 #ifdef PLUMBL_MCU_STM32L433
     lgk_boot_flash_write(addr, (void *)data, len);
 #else

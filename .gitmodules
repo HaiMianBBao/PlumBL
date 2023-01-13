@@ -1,3 +1,6 @@
 [submodule "CherryUSB"]
 	path = CherryUSB
 	url = git@github.com:sakumisu/CherryUSB.git
+[submodule "mcuboot"]
+	path = mcuboot
+	url = git@github.com:mcu-tools/mcuboot.git

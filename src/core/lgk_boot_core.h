@@ -37,6 +37,11 @@
 
 #include "port_common.h"
 
+#ifdef USE_MCU_BOOT
+#include "image.h"
+#include "bootutil.h"
+#endif
+
 #ifndef LGK_BOOT_DEBUG
 #define LGK_BOOT_DEBUG 0
 #endif

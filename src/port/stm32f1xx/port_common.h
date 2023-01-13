@@ -22,10 +22,6 @@ extern uint32_t _sstack[];
 #define SECTOR_SIZE 1024
 #endif
 
-#ifndef BOARD_FLASH_APP_START
-#define BOARD_FLASH_APP_START 0x08005000UL
-#endif
-
 #ifndef RAM_SIZE
 #define RAM_SIZE 20 * 1024
 #endif
@@ -44,6 +40,22 @@ extern uint32_t _sstack[];
 
 #ifndef BOARD_FLASH_SIZE
 #define BOARD_FLASH_SIZE (64 * 1024)
+#endif
+
+/**
+ * MCU Boot
+ */
+#define BOOT_START_ADDRESS  FLASH_BASE_ADDR
+#define APP_CODE_START_ADDR (BOOT_START_ADDRESS + 0x0000b000)       /*!< 44k */
+#define APP_CODE_END_ADDR   (BOOT_START_ADDRESS + BOARD_FLASH_SIZE) /*!< 64k */
+#define HEAD_SIZE           0x1000                                  /*!< 4K */
+
+#ifndef BOARD_FLASH_APP_START
+#ifdef USE_MCU_BOOT
+#define BOARD_FLASH_APP_START (APP_CODE_START_ADDR + HEAD_SIZE) /*!< 0x0000b000 + 0x1000 = 48k */
+#else
+#define BOARD_FLASH_APP_START 0x80007000
+#endif
 #endif
 
 #define BOARD_STACK_APP_END (BOARD_STACK_APP_START + (RAM_SIZE))
