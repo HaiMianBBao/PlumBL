@@ -1,8 +1,13 @@
 #pragma once
 
+#ifndef HARD_ENTER_BOOT
 #define HARD_ENTER_BOOT 1
+#endif
+
 #if HARD_ENTER_BOOT
+#ifndef HARD_ENTER_BL_WAY
 #define HARD_ENTER_BL_WAY HARD_ENTER_BL_WAY_DB_RST
+#endif
 #endif
 
 /*!< ---------------------------------------------------------------------------- */
