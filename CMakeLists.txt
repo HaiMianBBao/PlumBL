@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
+if(${CHIP_FAMILY} STREQUAL "nrf5x")
+else()
 sdk_append_inc(${CMAKE_CURRENT_LIST_DIR}/CherryUSB/class/hid)
 sdk_append_inc(${CMAKE_CURRENT_LIST_DIR}/CherryUSB/class/cdc)
 sdk_append_inc(${CMAKE_CURRENT_LIST_DIR}/CherryUSB/class/msc)
@@ -24,6 +26,5 @@ endif()
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/core/*.c)
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/port/common/${BL_TYPE}/*.c)
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/port/${CHIP_FAMILY}/*.c)
-
+endif()
 add_subdirectory(drv)
-

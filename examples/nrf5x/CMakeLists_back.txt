@@ -1,0 +1,247 @@
+cmake_minimum_required(VERSION 3.15)
+
+find_package(plumbl_sdk REQUIRED HINTS $ENV{PLUMBL_SDK_BASE})
+
+set(SDK_PATH   ${PLUMBL_SDK_BASE}/drv/nrf5x_drivers/sdk/components)
+set(SDK11_PATH ${PLUMBL_SDK_BASE}/drv/nrf5x_drivers/sdk11/components)
+set(TUSB_PATH  ${PLUMBL_SDK_BASE}/drv/nrf5x_drivers/tinyusb/src)
+set(NRFX_PATH  ${PLUMBL_SDK_BASE}/drv/nrf5x_drivers/nrfx)
+
+set(SD_HEX  drv/nrf5x_drivers/softdevice/${SD_FILENAME}/${SD_FILENAME}_softdevice.hex)
+set(MBR_HEX drv/nrf5x_drivers/softdevice/mbr/hex/mbr_nrf52_2.4.1_mbr.hex)
+
+sdk_append_inc(.)
+sdk_append_inc(boards)
+sdk_append_inc(boards/${BOARD})
+sdk_append_inc(cmsis/include)
+sdk_append_inc(usb)
+sdk_append_inc(usb/uf2)
+
+sdk_append_source(boards/boards.c)
+sdk_append_source(dfu_ble_svc.c)
+sdk_append_source(dfu_init.c)
+sdk_append_source(flash_nrf5x.c)
+
+# nrfx
+sdk_append_source(${NRFX_PATH}/drivers/src/nrfx_power.c)
+sdk_append_source(${NRFX_PATH}/drivers/src/nrfx_nvmc.c)
+sdk_append_source(${NRFX_PATH}/mdk/system_${MCU_SUB_VARIANT}.c)
+
+# SDK 11 files: serial + OTA DFU
+sdk_append_source(${SDK11_PATH}/libraries/bootloader_dfu/bootloader.c)
+sdk_append_source(${SDK11_PATH}/libraries/bootloader_dfu/bootloader_settings.c)
+sdk_append_source(${SDK11_PATH}/libraries/bootloader_dfu/bootloader_util.c)
+sdk_append_source(${SDK11_PATH}/libraries/bootloader_dfu/dfu_transport_serial.c)
+sdk_append_source(${SDK11_PATH}/libraries/bootloader_dfu/dfu_transport_ble.c)
+sdk_append_source(${SDK11_PATH}/libraries/bootloader_dfu/dfu_single_bank.c)
+sdk_append_source(${SDK11_PATH}/ble/ble_services/ble_dfu/ble_dfu.c)
+sdk_append_source(${SDK11_PATH}/ble/ble_services/ble_dis/ble_dis.c)
+sdk_append_source(${SDK11_PATH}/drivers_nrf/pstorage/pstorage_raw.c)
+
+# Latest SDK files: peripheral drivers
+sdk_append_source(${SDK_PATH}/libraries/timer/app_timer.c)
+sdk_append_source(${SDK_PATH}/libraries/scheduler/app_scheduler.c)
+sdk_append_source(${SDK_PATH}/libraries/util/app_error.c)
+sdk_append_source(${SDK_PATH}/libraries/util/app_util_platform.c)
+sdk_append_source(${SDK_PATH}/libraries/crc16/crc16.c)
+sdk_append_source(${SDK_PATH}/libraries/hci/hci_mem_pool.c)
+sdk_append_source(${SDK_PATH}/libraries/hci/hci_slip.c)
+sdk_append_source(${SDK_PATH}/libraries/hci/hci_transport.c)
+sdk_append_source(${SDK_PATH}/libraries/util/nrf_assert.c)
+
+# UART or USB Serial
+if($(MCU_SUB_VARIANT) STREQUAL "nrf52")
+sdk_append_inc(${SDK11_PATH}/libraries/util)
+sdk_append_inc(${SDK_PATH}/drivers_nrf/common)
+sdk_append_inc(${SDK_PATH}/drivers_nrf/uart)
+sdk_append_source(${SDK_PATH}/libraries/uart/app_uart.c)
+sdk_append_source(${SDK_PATH}/drivers_nrf/uart/nrf_drv_uart.c)
+sdk_append_source(${SDK_PATH}/drivers_nrf/common/nrf_drv_common.c)
+else()
+# pinconfig is required for 840 for CF2
+# C_SRC += src/boards/$(BOARD)/pinconfig.c
+sdk_append_source(boards/${BOARD}/pinconfig.c)
+# USB Application ( MSC + UF2 )
+sdk_append_source(usb/uf2/ghostfat.c)
+sdk_append_source(usb/msc_uf2.c)
+sdk_append_source(usb/usb_desc.c)
+sdk_append_source(usb/usb.c)
+# TinyUSB stack
+sdk_append_source(${TUSB_PATH}/portable/nordic/nrf5x/dcd_nrf5x.c)
+sdk_append_source(${TUSB_PATH}/common/tusb_fifo.c)
+sdk_append_source(${TUSB_PATH}/device/usbd.c)
+sdk_append_source(${TUSB_PATH}/device/usbd_control.c)
+sdk_append_source(${TUSB_PATH}/class/cdc/cdc_device.c)
+sdk_append_source(${TUSB_PATH}/class/msc/msc_device.c)
+sdk_append_source(${TUSB_PATH}/tusb.c)
+endif()
+
+sdk_append_source(${NRFX_PATH}/mdk/gcc_startup_${MCU_SUB_VARIANT}.S)
+sdk_append_inc(${TUSB_PATH})
+
+# nrfx
+sdk_append_inc(${NRFX_PATH})
+sdk_append_inc(${NRFX_PATH}/mdk)
+sdk_append_inc(${NRFX_PATH}/hal)
+sdk_append_inc(${NRFX_PATH}/drivers/include)
+sdk_append_inc(${NRFX_PATH}/drivers/src)
+
+# sdk11 for cdc/ble dfu
+sdk_append_inc(${SDK11_PATH}/libraries/bootloader_dfu/hci_transport)
+sdk_append_inc(${SDK11_PATH}/libraries/bootloader_dfu)
+sdk_append_inc(${SDK11_PATH}/drivers_nrf/pstorage)
+sdk_append_inc(${SDK11_PATH}/ble/common)
+sdk_append_inc(${SDK11_PATH}/ble/ble_services/ble_dfu)
+sdk_append_inc(${SDK11_PATH}/ble/ble_services/ble_dis)
+
+# later sdk with updated drivers
+sdk_append_inc(${SDK_PATH}/libraries/timer)
+sdk_append_inc(${SDK_PATH}/libraries/scheduler)
+sdk_append_inc(${SDK_PATH}/libraries/crc16)
+sdk_append_inc(${SDK_PATH}/libraries/util)
+sdk_append_inc(${SDK_PATH}/libraries/hci/config)
+sdk_append_inc(${SDK_PATH}/libraries/uart)
+sdk_append_inc(${SDK_PATH}/libraries/hci)
+sdk_append_inc(${SDK_PATH}/drivers_nrf/delay)
+
+# SoftDevice
+sdk_append_inc(${SD_PATH}/${SD_FILENAME}_API/include)
+sdk_append_inc(${SD_PATH}/${SD_FILENAME}_API/include/nrf52)
+
+if(${DEBUG})
+sdk_add_compile_definitions(-DDEBUG=1)
+sdk_add_compile_definitions(-DLGK_BOOT_DEBUG=1)
+endif()
+
+if(${BL_TYPE} STREQUAL "dfu")
+sdk_add_compile_definitions(-DUSB_REQUEST_BUFFER_SIZE=4096)
+sdk_add_compile_definitions(-DUSBD_DFU_APP_DEFAULT_ADD=0x10000)
+sdk_add_compile_definitions(-DUSBD_DFU_XFER_SIZE=4096)
+endif()
+
+if(${BL_TYPE} STREQUAL "uf2")
+# sdk_add_compile_definitions(-DUF2_BOARD_ID="Plum Bootloader for NRF5x")
+# sdk_add_compile_definitions(-DUF2_VOLUME_LABEL="NRF5xPlum")
+# sdk_add_compile_definitions(-DBOARD_UF2_FAMILY_ID=0xabcd5200)
+endif()
+
+sdk_add_compile_definitions(-DPLUMBL_MCU_NRF5X)
+
+sdk_add_compile_options(-mthumb
+                        -mabi=aapcs 
+                        -mcpu=cortex-m4 
+                        -mfloat-abi=hard 
+                        -mfpu=fpv4-sp-d16 
+                        -ggdb 
+                        -Os 
+                        -ffunction-sections 
+                        -fdata-sections 
+                        -fno-builtin 
+                        -fshort-enums 
+                        -fstack-usage 
+                        -fno-strict-aliasing 
+                        -Wall 
+                        -Wextra 
+                        -Werror 
+                        -Wfatal-errors 
+                        -Werror-implicit-function-declaration 
+                        -Wfloat-equal 
+                        -Wundef 
+                        -Wshadow 
+                        -Wwrite-strings 
+                        -Wsign-compare 
+                        -Wmissing-format-attribute 
+                        -Wno-endif-labels 
+                        -Wunreachable-code
+                        -Wno-unused-parameter
+                        -Wno-expansion-to-defined
+                        --param=min-pagesize=0)
+
+sdk_add_compile_definitions(-D__HEAP_SIZE=0)
+sdk_add_compile_definitions(-DCONFIG_GPIO_AS_PINRESET)
+sdk_add_compile_definitions(-DSOFTDEVICE_PRESENT)
+sdk_add_compile_definitions(-DBLEDIS_FW_VERSION=${BLEDIS_FW_VERSION})
+sdk_add_compile_definitions(-DMK_BOOTLOADER_VERSION=${MK_BOOTLOADER_VERSION})
+sdk_add_compile_definitions(-DUF2_VERSION=${UF2_VERSION})
+
+if(${MCU_SUB_VARIANT} STREQUAL "nrf52")
+sdk_add_compile_definitions(-DNRF52)
+sdk_add_compile_definitions(-DNRF52832_XXAA)
+sdk_add_compile_definitions(-DS132)
+elseif(${MCU_SUB_VARIANT} STREQUAL "nrf52833") 
+sdk_add_compile_definitions(-DNRF52833_XXAA)
+sdk_add_compile_definitions(-DS140)
+elseif(${MCU_SUB_VARIANT} STREQUAL "nrf52840")
+sdk_add_compile_definitions(-DNRF52840_XXAA)
+sdk_add_compile_definitions(-DS140)
+endif()
+
+# Debug option use RTT for printf
+if(${DEBUG})
+    sdk_add_compile_definitions(-DCFG_DEBUG)
+    sdk_add_compile_definitions(-DSEGGER_RTT_MODE_DEFAULT=SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL)
+    sdk_append_inc(${PLUMBL_SDK_BASE}/drv/rtt_viewer_drivers)
+    sdk_append_source(${PLUMBL_SDK_BASE}/drv/SEGGER_RTT.c)
+    sdk_add_compile_definitions(-DDFU_APP_DATA_RESERVED=0)
+    # expand bootloader address to 28KB of reserved app
+    if(${MCU_SUB_VARIANT} STREQUAL "nrf52840")
+        sdk_add_compile_definitions(-DBOOTLOADER_REGION_START=0xED000)
+    else()
+        sdk_add_compile_definitions(-DBOOTLOADER_REGION_START=0x6D000)
+    endif()
+else()
+sdk_add_compile_definitions(-DDFU_APP_DATA_RESERVED=${DFU_APP_DATA_RESERVED})
+endif()
+
+sdk_add_link_options(-mthumb
+                    -mabi=aapcs 
+                    -mcpu=cortex-m4 
+                    -mfloat-abi=hard 
+                    -mfpu=fpv4-sp-d16 
+                    -ggdb 
+                    -Os 
+                    -ffunction-sections 
+                    -fdata-sections 
+                    -fno-builtin 
+                    -fshort-enums 
+                    -fstack-usage 
+                    -fno-strict-aliasing 
+                    -Wall 
+                    -Wextra 
+                    -Werror 
+                    -Wfatal-errors 
+                    -Werror-implicit-function-declaration 
+                    -Wfloat-equal 
+                    -Wundef 
+                    -Wshadow 
+                    -Wwrite-strings 
+                    -Wsign-compare 
+                    -Wmissing-format-attribute 
+                    -Wno-endif-labels 
+                    -Wunreachable-code
+                    -Wno-unused-parameter
+                    -Wno-expansion-to-defined
+                    --param=min-pagesize=0
+                    -Wl,-cref -Wl,-gc-sections
+                    -lm -lc
+                    --specs=nosys.specs 
+                    # --specs=nano.specs)
+
+if(${DEBUG})
+    set(LD_FILE ${PLUMBL_SDK_BASE}/board/linker/nrf5x/${MCU_SUB_VARIANT}_debug.ld)
+else()
+    set(LD_FILE ${PLUMBL_SDK_BASE}/board/linker/nrf5x/${MCU_SUB_VARIANT}.ld)
+endif()
+
+sdk_set_linker_script(${LD_FILE})
+
+sdk_set_main_file(main.c)
+project(${CHIP}_${BL_TYPE})
+
+get_target_property(C_CPP_PROPERTIES_DEFINES sdk_intf_lib INTERFACE_COMPILE_DEFINITIONS)
+get_target_property(C_CPP_PROPERTIES_OPITONS sdk_intf_lib INTERFACE_COMPILE_OPTIONS)
+
+add_custom_command(TARGET ${CHIP}_${BL_TYPE}.elf POST_BUILD
+COMMAND python ../../../utils/hexmerge.py --overlap=replace -o ${CHIP}_${BL_TYPE}_mbr_nosd.hex build_out/${CHIP}_${BL_TYPE}.hex ../../../${MBR_HEX}
+COMMAND python ../../../utils/hexmerge.py -o ${CHIP}_${BL_TYPE}_mbr_sd.hex build_out/${CHIP}_${BL_TYPE}.hex ../../../${SD_HEX}
+)
