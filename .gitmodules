@@ -4,3 +4,6 @@
 [submodule "mcuboot"]
 	path = mcuboot
 	url = git@github.com:mcu-tools/mcuboot.git
+[submodule "drv/nrf5x_drivers/tinyusb"]
+	path = drv/nrf5x_drivers/tinyusb
+	url = git@github.com:hathach/tinyusb.git
