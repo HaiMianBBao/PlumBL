@@ -1,8 +1,6 @@
 # PLUM_BOOTLOADER
 This is a lightweight microcontroller bootloader. At present, you can use u2f, dfu-util.exe tools, to complete the firmware upgrade. At the same time, it is also portable and can be easily transplanted to other chips. It only needs to implement the interface under the port folder. At present, I have finished the transplantation of ch58x series, stm32f401, stm32f103, stm32l433.
 
-This PlumUSB is written when learning CherryUSB. You can replace it with CherryUSB. I'll change to CherryUSB later.
-
 Ch58x You need to decide whether to jump to the app.
 ```
 bool lgk_boot_app_is_vaild(uint32_t check_code_add)
@@ -10,6 +8,18 @@ bool lgk_boot_app_is_vaild(uint32_t check_code_add)
     /*!< Your code >*/
     return true;
 }
+```
+# Clone
+## step 1
+```
+git clone https://github.com/HaiMianBBao/PlumBL.git
+or
+git clone git@github.com:HaiMianBBao/PlumBL.git
+```
+## step 2
+```
+cd PlumBL
+git submodule update --init --recursive
 ```
 
 # Build
@@ -23,6 +33,14 @@ make or make BL_TYPE=uf2
 ```
 cd examples/xxx
 make BL_TYPE=dfu
+```
+
+## mcu boot
+```
+cd examples/xxx
+make BL_TYPE=uf2 USE_MCU_BOOT=yes
+or
+make BL_TYPE=dfu USE_MCU_BOOT=yes
 ```
 
 # Make APP file
@@ -60,7 +78,12 @@ hex:
 python uf2conv.py xxx.hex -o xxx.uf2 -c -f BOARD_UF2_FAMILY_ID
 
 bin:
+1、Do not use mcuboot
 python uf2conv.py xxx.bin -o xxx.uf2 -c -f BOARD_UF2_FAMILY_ID -b BOARD_FLASH_APP_START
+
+2、Use mcuboot
+python uf2conv.py xxx.bin -o xxx.uf2 -c -f BOARD_UF2_FAMILY_ID -b BOARD_FLASH_APP_START - HEAD_SIZE
+The HEAD_SIZE default value is 0x1000
 ```
 The you can drag the .uf2 file into the u disk to download.
 

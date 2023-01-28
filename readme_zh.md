@@ -1,8 +1,6 @@
 # PLUM_BOOTLOADER
 这是一个轻量级的单片机引导程序。目前，你可以使用u2f、dfu-util.exe工具来完成固件升级。同时，它也是可移植的，可以很容易地移植到其他芯片上。你只需要实现port文件夹下的接口函数。目前，我已经完成了ch58x系列、stm32f401、stm32f103、stm32l433的移植。
 
-PlumUSB是在学习CherryUSB时编写的。你可以用CherryUSB代替它。我也会在后面抽时间换成CherryUSB。
-
 Ch58x 你需要自己实现是否要跳转到app的函数
 ```
 bool lgk_boot_app_is_vaild(uint32_t check_code_add)
@@ -10,6 +8,19 @@ bool lgk_boot_app_is_vaild(uint32_t check_code_add)
     /*!< Your code >*/
     return true;
 }
+```
+
+# 克隆
+## step 1
+```
+git clone https://github.com/HaiMianBBao/PlumBL.git
+or
+git clone git@github.com:HaiMianBBao/PlumBL.git
+```
+## step 2
+```
+cd PlumBL
+git submodule update --init --recursive
 ```
 
 # 构建
@@ -23,6 +34,13 @@ make or make BL_TYPE=uf2
 ```
 cd examples/xxx
 make BL_TYPE=dfu
+```
+## mcu boot
+```
+cd examples/xxx
+make BL_TYPE=uf2 USE_MCU_BOOT=yes
+or
+make BL_TYPE=dfu USE_MCU_BOOT=yes
 ```
 
 # 制作APP文件
@@ -59,8 +77,13 @@ stm32l433:
 hex:
 python uf2conv.py xxx.hex -o xxx.uf2 -c -f BOARD_UF2_FAMILY_ID
 
+1、不使用mcuboot
 bin:
 python uf2conv.py xxx.bin -o xxx.uf2 -c -f BOARD_UF2_FAMILY_ID -b BOARD_FLASH_APP_START
+
+2、使用mcuboot
+python uf2conv.py xxx.bin -o xxx.uf2 -c -f BOARD_UF2_FAMILY_ID -b BOARD_FLASH_APP_START - HEAD_SIZE
+HEAD_SIZE的默认值是0x1000
 ```
 有了.uf2文件，你就可以将.uf2文件拖入u盘来实现固件升级了。
 
