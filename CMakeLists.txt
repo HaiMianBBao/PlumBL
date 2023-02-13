@@ -25,7 +25,7 @@ sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/core/*.c)
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/port/common/${BL_TYPE}/*.c)
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/port/${CHIP_FAMILY}/*.c)
 
-if(USE_MCU_BOOT)
+if(${USE_MCU_BOOT})
 # MCU Boot
 sdk_append_inc(${CMAKE_CURRENT_LIST_DIR}/mcuboot/ext/mbedtls/include)
 sdk_append_inc(${CMAKE_CURRENT_LIST_DIR}/mcuboot/ext/mbedtls/library)
@@ -57,6 +57,12 @@ sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/mcuboot/boot/bootutil/src/swap_move.
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/mcuboot/boot/bootutil/src/swap_scratch.c)
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/mcuboot/boot/bootutil/src/tlv.c)
 sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/port/common/mcu_boot/mcu_boot.c)
+endif()
+
+if(${USE_ENC})
+sdk_append_inc(${CMAKE_CURRENT_LIST_DIR}/src/port/common/encrypt)
+sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/port/common/encrypt/aes.c)
+sdk_append_source(${CMAKE_CURRENT_LIST_DIR}/src/port/common/encrypt/crypt.c)
 endif()
 
 add_subdirectory(drv)

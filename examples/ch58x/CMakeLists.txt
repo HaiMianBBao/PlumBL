@@ -3,14 +3,18 @@ cmake_minimum_required(VERSION 3.15)
 find_package(plumbl_sdk REQUIRED HINTS $ENV{PLUMBL_SDK_BASE})
 sdk_append_inc(.)
 
-if(DEBUG)
+if(${DEBUG})
 sdk_add_compile_definitions(-DDEBUG=1)
 sdk_add_compile_definitions(-DLGK_BOOT_DEBUG=1)
 endif()
 
-if(USE_MCU_BOOT)
+if(${USE_MCU_BOOT})
 sdk_append_source(test_key.c)
 sdk_add_compile_definitions(-DUSE_MCU_BOOT)
+endif()
+
+if(${USE_ENC})
+sdk_add_compile_definitions(-DUSE_ENC)
 endif()
 
 if(${BL_TYPE} STREQUAL "dfu")
@@ -29,7 +33,7 @@ sdk_add_compile_definitions(-DPLUMBL_MCU_CH582)
 
 sdk_set_main_file(main.c)
 
-if(USE_MCU_BOOT)
+if(${USE_MCU_BOOT})
 project(${CHIP}_${BL_TYPE}_mcuboot)
 else()
 project(${CHIP}_${BL_TYPE})

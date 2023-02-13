@@ -36,6 +36,11 @@ void board_flash_read(uint32_t addr, void *buffer, uint32_t len)
 // Write to flash
 void board_flash_write(uint32_t addr, void const *data, uint32_t len)
 {
+#ifdef USE_ENC
+    extern void crypt_decrypt(uint8_t * buf, uint32_t size, uint32_t addr);
+    crypt_decrypt((uint8_t *)data, len, addr);
+#endif
+
 #ifdef USE_MCU_BOOT
     uint32_t limit_address = APP_CODE_START_ADDR;
 #else

@@ -6,7 +6,7 @@ sdk_append_inc(Inc)
 sdk_append_inc(.)
 sdk_append_source(Src/app.c)
 
-if(DEBUG)
+if(${DEBUG})
 sdk_add_compile_definitions(-DLGK_BOOT_DEBUG=1)
 endif()
 

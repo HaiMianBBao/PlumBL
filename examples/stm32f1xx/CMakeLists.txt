@@ -8,12 +8,12 @@ sdk_append_source(Src/stm32f1xx_hal_msp.c)
 sdk_append_source(Src/stm32f1xx_it.c)
 sdk_append_source(Src/system_stm32f1xx.c)
 
-if(DEBUG)
+if(${DEBUG})
 message(STATUS "${Red} Warring !! Please check the size you assigned to the bootloader flash. It may exceed this size after the log is enabled ${ColourReset}")  
 sdk_add_compile_definitions(-DLGK_BOOT_DEBUG=1)
 endif()
 
-if(USE_MCU_BOOT)
+if(${USE_MCU_BOOT})
 sdk_append_source(test_key.c)
 sdk_add_compile_definitions(-DUSE_MCU_BOOT)
 endif()
@@ -37,7 +37,7 @@ sdk_add_compile_definitions(-DPLUMBL_MCU_STM32F103)
 
 sdk_set_main_file(Src/main.c)
 
-if(USE_MCU_BOOT)
+if(${USE_MCU_BOOT})
 project(${CHIP}_${BL_TYPE}_mcuboot)
 else()
 project(${CHIP}_${BL_TYPE})

@@ -4,6 +4,7 @@ export PLUMBL_SDK_BASE
 
 BL_TYPE?=uf2
 USE_MCU_BOOT?=n
+USE_ENC?=n
 DEBUG?=n
 CHIP?=ch58x
 CHIP_FAMILY?=ch58x
