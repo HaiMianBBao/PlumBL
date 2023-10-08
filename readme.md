@@ -1,5 +1,5 @@
 # PLUM_BOOTLOADER
-This is a lightweight microcontroller bootloader. At present, you can use u2f, dfu-util.exe tools, to complete the firmware upgrade. At the same time, it is also portable and can be easily transplanted to other chips. It only needs to implement the interface under the port folder. At present, I have finished the transplantation of ch58x series, stm32f401, stm32f103, stm32l433.
+This is a lightweight microcontroller bootloader. At present, you can use u2f, dfu-util.exe tools, to complete the firmware upgrade. At the same time, it is also portable and can be easily transplanted to other chips. It only needs to implement the interface under the port folder. At present, I have finished the transplantation of ch58x series, ch32v30x, stm32f401, stm32f103, stm32l433.
 
 Ch58x You need to decide whether to jump to the app.
 ```
@@ -48,6 +48,9 @@ make BL_TYPE=dfu USE_MCU_BOOT=yes
 ch58x:
 #define BOARD_FLASH_APP_START 0x00010000UL
 
+ch32v30x:
+#define BOARD_FLASH_APP_START 0x08010000UL
+
 stm32f103:
 #define BOARD_FLASH_APP_START 0x08005000UL
 
@@ -63,6 +66,9 @@ When you have the xxx. hex file, you only need to go to the official side of UF2
 ```
 ch58x:
 #define BOARD_UF2_FAMILY_ID  0xabcdc582 // BOARD_UF2_FAMILY_ID is defined in uf2.h
+
+ch32v30x:
+#define BOARD_UF2_FAMILY_ID  0xabcdc320 // BOARD_UF2_FAMILY_ID is defined in uf2.h
 
 stm32f103:
 #define BOARD_UF2_FAMILY_ID  0xabcdf103 // BOARD_UF2_FAMILY_ID is defined in uf2.h
@@ -149,6 +155,14 @@ The bin file of this test will make your settings into a daplink.
 Your app should have the following code
 ```
 ch58x:
+void boot_jump(void)
+{
+    uint32_t *boot_magic = (uint32_t *)0x20007ffc;
+    *boot_magic = 0xc220b134;
+    mcu_reset();
+}
+
+ch32v30x:
 void boot_jump(void)
 {
     uint32_t *boot_magic = (uint32_t *)0x20007ffc;

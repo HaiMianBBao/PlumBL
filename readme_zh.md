@@ -1,5 +1,5 @@
 # PLUM_BOOTLOADER
-这是一个轻量级的单片机引导程序。目前，你可以使用u2f、dfu-util.exe工具来完成固件升级。同时，它也是可移植的，可以很容易地移植到其他芯片上。你只需要实现port文件夹下的接口函数。目前，我已经完成了ch58x系列、stm32f401、stm32f103、stm32l433的移植。
+这是一个轻量级的单片机引导程序。目前，你可以使用u2f、dfu-util.exe工具来完成固件升级。同时，它也是可移植的，可以很容易地移植到其他芯片上。你只需要实现port文件夹下的接口函数。目前，我已经完成了ch58x系列、ch32v30x、stm32f401、stm32f103、stm32l433的移植。
 
 Ch58x 你需要自己实现是否要跳转到app的函数
 ```
@@ -48,6 +48,9 @@ make BL_TYPE=dfu USE_MCU_BOOT=yes
 ch58x:
 #define BOARD_FLASH_APP_START 0x00010000UL
 
+ch32v30x:
+#define BOARD_FLASH_APP_START 0x08010000UL
+
 stm32f103:
 #define BOARD_FLASH_APP_START 0x08005000UL
 
@@ -63,6 +66,9 @@ stm32l433:
 ```
 ch58x:
 #define BOARD_UF2_FAMILY_ID  0xabcdc582 // BOARD_UF2_FAMILY_ID is defined in uf2.h
+
+ch32v30x:
+#define BOARD_UF2_FAMILY_ID  0xabcdc320 // BOARD_UF2_FAMILY_ID is defined in uf2.h
 
 stm32f103:
 #define BOARD_UF2_FAMILY_ID  0xabcdf103 // BOARD_UF2_FAMILY_ID is defined in uf2.h
@@ -149,6 +155,14 @@ The bin file of this test will make your settings into a daplink.
 Your app should have the following code
 ```
 ch58x:
+void boot_jump(void)
+{
+    uint32_t *boot_magic = (uint32_t *)0x20007ffc;
+    *boot_magic = 0xc220b134;
+    mcu_reset();
+}
+
+ch32v30x:
 void boot_jump(void)
 {
     uint32_t *boot_magic = (uint32_t *)0x20007ffc;
