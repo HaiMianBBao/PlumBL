@@ -47,7 +47,7 @@ SOFTWARE.
 #ifndef UF2_BOARD_ID
 #define UF2_BOARD_ID         "Plum Bootloader for LG Studio"
 #endif
-#define UF2_INDEX_URL        "https://www.lg_studio.com/"
+#define UF2_INDEX_URL        "https://github.com/HaiMianBBao/PlumBL"
 #ifndef UF2_VOLUME_LABEL
 #define UF2_VOLUME_LABEL     "LG-Plum"
 #endif

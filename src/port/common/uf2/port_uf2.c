@@ -42,14 +42,14 @@ void board_flash_write(uint32_t addr, void const *data, uint32_t len)
     uint32_t limit_address = BOARD_FLASH_APP_START;
 #endif
     if (addr < limit_address) {
-        lgk_boot_log("Error addr 0x%08lX will break the bootloader\r\n");
+        lgk_boot_log("Error addr 0x%08lX will break the bootloader, length = %d\r\n", addr, len);
         return;
     }
 
 #ifdef PLUMBL_MCU_STM32L433
     lgk_boot_flash_write(addr, (void *)data, len);
 #else
-#if (defined(PLUMBL_MCU_CH582) || defined(PLUMBL_MCU_STM32F103) || defined(PLUMBL_MCU_STM32L073))
+#if (defined(PLUMBL_MCU_CH582) || defined(PLUMBL_MCU_STM32F103) || defined(PLUMBL_MCU_STM32L073) || defined(PLUMBL_MCU_CH32V30x))
     if ((addr & (MIN_FLASH_ERASE_SIZE - 1)) == 0) {
         lgk_boot_flash_erase(addr, MIN_FLASH_ERASE_SIZE);
     }
@@ -57,7 +57,7 @@ void board_flash_write(uint32_t addr, void const *data, uint32_t len)
     // skip the write if contents matches
     if (memcmp(data, (void *)addr, len) != 0) {
         /*!< Need write new array */
-        lgk_boot_log("Write 0x%08lX\r\n", addr);
+        lgk_boot_log("Write 0x%08lX  length = %d\r\n", addr, len);
         lgk_boot_flash_write(addr, (void *)data, len);
     }
 #endif
