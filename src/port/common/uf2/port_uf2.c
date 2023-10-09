@@ -49,15 +49,17 @@ void board_flash_write(uint32_t addr, void const *data, uint32_t len)
 #ifdef PLUMBL_MCU_STM32L433
     lgk_boot_flash_write(addr, (void *)data, len);
 #else
-#if (defined(PLUMBL_MCU_CH582) || defined(PLUMBL_MCU_STM32F103) || defined(PLUMBL_MCU_STM32L073) || defined(PLUMBL_MCU_CH32V30x))
-    if ((addr & (MIN_FLASH_ERASE_SIZE - 1)) == 0) {
-        lgk_boot_flash_erase(addr, MIN_FLASH_ERASE_SIZE);
-    }
-#endif
     // skip the write if contents matches
     if (memcmp(data, (void *)addr, len) != 0) {
         /*!< Need write new array */
         lgk_boot_log("Write 0x%08lX  length = %d\r\n", addr, len);
+
+#if (defined(PLUMBL_MCU_CH582) || defined(PLUMBL_MCU_STM32F103) || defined(PLUMBL_MCU_STM32L073) || defined(PLUMBL_MCU_CH32V30x))
+        if ((addr & (MIN_FLASH_ERASE_SIZE - 1)) == 0) {
+            lgk_boot_flash_erase(addr, MIN_FLASH_ERASE_SIZE);
+        }
+#endif
+
         lgk_boot_flash_write(addr, (void *)data, len);
     }
 #endif
