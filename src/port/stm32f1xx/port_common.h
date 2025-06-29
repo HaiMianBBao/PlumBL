@@ -59,7 +59,7 @@ extern uint32_t _sstack[];
 #ifdef USE_MCU_BOOT
 #define BOARD_FLASH_APP_START (APP_CODE_START_ADDR + HEAD_SIZE) /*!< 0x0000b000 + 0x1000 = 48k */
 #else
-#define BOARD_FLASH_APP_START 0x80007000
+#define BOARD_FLASH_APP_START 0x08007000
 #endif
 #endif
 
